@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 // ==========================================
 // 모듈러 스케일 (Every Layout 간격 토큰)
 // ==========================================
@@ -29,16 +31,14 @@
 body {
   // 모듈러 스케일의 기준이 되는 줄 간격
   line-height: var(--ratio);
-  background-color: #fff;
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  color: #222;
+  background-color: $blue-900;
+  font-family: $font-body;
+  color: $white;
   -webkit-font-smoothing: antialiased;
 }
 
-button:focus-visible {
-  outline: 3px solid blue;
-  outline-offset: 3px;
+// 어두운 배경(blue-900)에서도 보이도록 모든 포커스 표시를 white로 통일한다.
+:focus-visible {
+  outline: 2px solid $white;
+  outline-offset: 4px;
 }

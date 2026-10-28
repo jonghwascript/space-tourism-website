@@ -5,9 +5,10 @@
 
 @use 'variables' as v;
 
-// @include font-style(24px, 700, 1.3); // size, weight, line-height
-@mixin font-style($size, $weight, $line-height) {
-  font-family: v.$font-primary;
+// @include font-style(24px, 700, 1.3); // size, weight, line-height (서체 기본값: Barlow)
+// @include font-style(1rem, 400, 1, v.$font-condensed); // 서체를 바꿀 때
+@mixin font-style($size, $weight, $line-height, $family: v.$font-body) {
+  font-family: $family;
   font-size: $size;
   font-weight: $weight;
   line-height: $line-height;
@@ -33,6 +34,18 @@
     @error '브레이크포인트 "#{$device}"가 존재하지 않습니다.';
   }
 }
+// @include mq-below('tablet') { ... } // 768px 미만에만 적용
+// 모바일에서만 필요한 상태 스타일이 큰 화면으로 새지 않게 할 때 쓴다. 기본 스타일은 mq()로 확장한다.
+@mixin mq-below($device) {
+  @if map.has-key(v.$breakpoints, $device) {
+    @media (width < math.div(map.get(v.$breakpoints, $device), 16px) * 1em) {
+      @content;
+    }
+  } @else {
+    @error '브레이크포인트 "#{$device}"가 존재하지 않습니다.';
+  }
+}
+
 // @include container(1110px, 24px); // 최대폭(디자인 기준), 좌우 최소 여백
 // 미디어 쿼리 없이 min()으로 처리 → 화면이 좁으면 여백만큼만 줄고, 넓으면 최대폭에서 멈춘다.
 @mixin container($max-width: 1110px, $gutter: 24px) {
