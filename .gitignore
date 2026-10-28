@@ -39,9 +39,12 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# AGENTS.md
+AGENTS.md
 CLAUDE.md
 README-template.md
 style-guide.md
 design/*
 storybook-static
+openspec/*
+.claude/*
+doc/*
