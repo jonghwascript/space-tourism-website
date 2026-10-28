@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Space tourism website</title>
-  <link rel="stylesheet" href="./css/style.css">
+@@include('../partials/head.html')
+  <title>Home | Frontend Mentor | Space tourism website</title>
 </head>
-<body>
+<body class="c-page c-page--home">
+@@include('../partials/header.html', {"current": "home"})
 
-  00 Home
-  01 Destination
-  02 Crew
-  03 Technology
+  <main class="c-hero" id="main">
+    <div class="c-hero__content l-stack">
+      <h1 class="c-hero__title">
+        <span class="c-hero__eyebrow">So, you want to travel to</span>
+        <span class="c-hero__headline">Space</span>
+      </h1>
+      <p class="c-hero__text">
+        Let’s face it; if you want to go to space, you might as well genuinely go to
+        outer space and not hover kind of on the edge of it. Well sit back, and relax
+        because we’ll give you a truly out of this world experience!
+      </p>
+    </div>
 
-  So, you want to travel to
-  Space
-  Let’s face it; if you want to go to space, you might as well genuinely go to 
-  outer space and not hover kind of on the edge of it. Well sit back, and relax 
-  because we’ll give you a truly out of this world experience!
-
-  Explore
-
+    <a class="c-explore" href="./destination-moon.html">Explore</a>
+  </main>
 </body>
 </html>

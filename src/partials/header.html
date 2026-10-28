@@ -1,0 +1,30 @@
+  <a class="c-skip-link" href="#main">Skip to main content</a>
+
+  <header class="c-site-header">
+    <a class="c-site-header__logo" href="./index.html">
+      <img class="c-site-header__logo-image" src="./images/shared/logo.svg" alt="Space tourism home" width="48" height="48">
+    </a>
+
+    <button class="c-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+      <img class="c-nav-toggle__icon c-nav-toggle__icon--open" src="./images/shared/icon-hamburger.svg" alt="" width="24" height="21">
+      <img class="c-nav-toggle__icon c-nav-toggle__icon--close" src="./images/shared/icon-close.svg" alt="" width="20" height="21">
+      <span class="u-sr-only">Open menu</span>
+    </button>
+
+    <nav class="c-nav" aria-label="Main">
+      <ul class="c-nav__list" id="primary-navigation" role="list">
+        <li class="c-nav__item">
+          <a class="c-nav__link" href="./index.html"@@if (context.current === 'home') { aria-current="page"}><span class="c-nav__number" aria-hidden="true">00</span> Home</a>
+        </li>
+        <li class="c-nav__item">
+          <a class="c-nav__link" href="./destination-moon.html"@@if (context.current === 'destination') { aria-current="page"}><span class="c-nav__number" aria-hidden="true">01</span> Destination</a>
+        </li>
+        <li class="c-nav__item">
+          <a class="c-nav__link" href="./crew-commander.html"@@if (context.current === 'crew') { aria-current="page"}><span class="c-nav__number" aria-hidden="true">02</span> Crew</a>
+        </li>
+        <li class="c-nav__item">
+          <a class="c-nav__link" href="./technology-vehicle.html"@@if (context.current === 'technology') { aria-current="page"}><span class="c-nav__number" aria-hidden="true">03</span> Technology</a>
+        </li>
+      </ul>
+    </nav>
+  </header>

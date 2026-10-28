@@ -1,0 +1,69 @@
+  <main class="c-technology" id="main">
+    <h1 class="c-page-title l-cluster">
+      <span class="c-page-title__number" aria-hidden="true">03</span>
+      <span class="c-page-title__text">Space launch 101</span>
+    </h1>
+
+    <div class="c-tabs c-tabs--numbers" role="tablist" aria-label="Launch terminology">
+      <button class="c-tabs__tab" id="technology-tab-vehicle" type="button" role="tab" aria-controls="technology-panel-vehicle" aria-selected="@@if (context.selected === 'vehicle') {true}@@if (context.selected !== 'vehicle') {false}" tabindex="@@if (context.selected === 'vehicle') {0}@@if (context.selected !== 'vehicle') {-1}">1<span class="u-sr-only"> Launch vehicle</span></button>
+      <button class="c-tabs__tab" id="technology-tab-spaceport" type="button" role="tab" aria-controls="technology-panel-spaceport" aria-selected="@@if (context.selected === 'spaceport') {true}@@if (context.selected !== 'spaceport') {false}" tabindex="@@if (context.selected === 'spaceport') {0}@@if (context.selected !== 'spaceport') {-1}">2<span class="u-sr-only"> Spaceport</span></button>
+      <button class="c-tabs__tab" id="technology-tab-capsule" type="button" role="tab" aria-controls="technology-panel-capsule" aria-selected="@@if (context.selected === 'capsule') {true}@@if (context.selected !== 'capsule') {false}" tabindex="@@if (context.selected === 'capsule') {0}@@if (context.selected !== 'capsule') {-1}">3<span class="u-sr-only"> Space capsule</span></button>
+    </div>
+
+    <div class="c-technology__panel" id="technology-panel-vehicle" role="tabpanel" aria-labelledby="technology-tab-vehicle" tabindex="0"@@if (context.selected !== 'vehicle') { hidden}>
+      <div class="c-technology__text l-stack">
+        <div class="c-technology__heading l-stack">
+          <p class="c-technology__eyebrow">The terminology…</p>
+          <h2 class="c-technology__name">Launch vehicle</h2>
+        </div>
+        <p class="c-technology__description">
+          A launch vehicle or carrier rocket is a rocket-propelled vehicle used to carry a
+          payload from Earth's surface to space, usually to Earth orbit or beyond. Our
+          WEB-X carrier rocket is the most powerful in operation. Standing 150 metres tall,
+          it's quite an awe-inspiring sight on the launch pad!
+        </p>
+      </div>
+      <picture class="c-technology__image">
+        <source media="(min-width: 64em)" srcset="./images/technology/image-launch-vehicle-portrait.jpg" width="586" height="600">
+        <img src="./images/technology/image-launch-vehicle-landscape.jpg" alt="A rocket lifting off from its launch pad between support towers" width="768" height="310">
+      </picture>
+    </div>
+
+    <div class="c-technology__panel" id="technology-panel-spaceport" role="tabpanel" aria-labelledby="technology-tab-spaceport" tabindex="0"@@if (context.selected !== 'spaceport') { hidden}>
+      <div class="c-technology__text l-stack">
+        <div class="c-technology__heading l-stack">
+          <p class="c-technology__eyebrow">The terminology…</p>
+          <h2 class="c-technology__name">Spaceport</h2>
+        </div>
+        <p class="c-technology__description">
+          A spaceport or cosmodrome is a site for launching (or receiving) spacecraft,
+          by analogy to the seaport for ships or airport for aircraft. Based in the
+          famous Cape Canaveral, our spaceport is ideally situated to take advantage
+          of the Earth’s rotation for launch.
+        </p>
+      </div>
+      <picture class="c-technology__image">
+        <source media="(min-width: 64em)" srcset="./images/technology/image-spaceport-portrait.jpg" width="586" height="600">
+        <img src="./images/technology/image-spaceport-landscape.jpg" alt="A rocket standing upright on the launch pad, held by service gantries" width="768" height="310">
+      </picture>
+    </div>
+
+    <div class="c-technology__panel" id="technology-panel-capsule" role="tabpanel" aria-labelledby="technology-tab-capsule" tabindex="0"@@if (context.selected !== 'capsule') { hidden}>
+      <div class="c-technology__text l-stack">
+        <div class="c-technology__heading l-stack">
+          <p class="c-technology__eyebrow">The terminology…</p>
+          <h2 class="c-technology__name">Space capsule</h2>
+        </div>
+        <p class="c-technology__description">
+          A space capsule is an often-crewed spacecraft that uses a blunt-body reentry
+          capsule to reenter the Earth's atmosphere without wings. Our capsule is where
+          you'll spend your time during the flight. It includes a space gym, cinema,
+          and plenty of other activities to keep you entertained.
+        </p>
+      </div>
+      <picture class="c-technology__image">
+        <source media="(min-width: 64em)" srcset="./images/technology/image-space-capsule-portrait.jpg" width="586" height="600">
+        <img src="./images/technology/image-space-capsule-landscape.jpg" alt="A white crew capsule orbiting above Earth" width="768" height="310">
+      </picture>
+    </div>
+  </main>

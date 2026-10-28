@@ -1,0 +1,86 @@
+  <main class="c-crew" id="main">
+    <h1 class="c-page-title l-cluster">
+      <span class="c-page-title__number" aria-hidden="true">02</span>
+      <span class="c-page-title__text">Meet your crew</span>
+    </h1>
+
+    <div class="c-tabs c-tabs--dots l-cluster" role="tablist" aria-label="Crew members">
+      <button class="c-tabs__tab" id="crew-tab-commander" type="button" role="tab" aria-controls="crew-panel-commander" aria-selected="@@if (context.selected === 'commander') {true}@@if (context.selected !== 'commander') {false}" tabindex="@@if (context.selected === 'commander') {0}@@if (context.selected !== 'commander') {-1}"><span class="u-sr-only">Douglas Hurley</span></button>
+      <button class="c-tabs__tab" id="crew-tab-specialist" type="button" role="tab" aria-controls="crew-panel-specialist" aria-selected="@@if (context.selected === 'specialist') {true}@@if (context.selected !== 'specialist') {false}" tabindex="@@if (context.selected === 'specialist') {0}@@if (context.selected !== 'specialist') {-1}"><span class="u-sr-only">Mark Shuttleworth</span></button>
+      <button class="c-tabs__tab" id="crew-tab-pilot" type="button" role="tab" aria-controls="crew-panel-pilot" aria-selected="@@if (context.selected === 'pilot') {true}@@if (context.selected !== 'pilot') {false}" tabindex="@@if (context.selected === 'pilot') {0}@@if (context.selected !== 'pilot') {-1}"><span class="u-sr-only">Victor Glover</span></button>
+      <button class="c-tabs__tab" id="crew-tab-engineer" type="button" role="tab" aria-controls="crew-panel-engineer" aria-selected="@@if (context.selected === 'engineer') {true}@@if (context.selected !== 'engineer') {false}" tabindex="@@if (context.selected === 'engineer') {0}@@if (context.selected !== 'engineer') {-1}"><span class="u-sr-only">Anousheh Ansari</span></button>
+    </div>
+
+    <div class="c-crew__panel" id="crew-panel-commander" role="tabpanel" aria-labelledby="crew-tab-commander" tabindex="0"@@if (context.selected !== 'commander') { hidden}>
+      <div class="c-crew__text l-stack">
+        <div class="c-crew__heading l-stack">
+          <p class="c-crew__role">Commander</p>
+          <h2 class="c-crew__name">Douglas Hurley</h2>
+        </div>
+        <p class="c-crew__bio">
+          Douglas Gerald Hurley is an American engineer, former Marine Corps pilot
+          and former NASA astronaut. He launched into space for the third time as
+          commander of Crew Dragon Demo-2.
+        </p>
+      </div>
+      <picture class="c-crew__image">
+        <source srcset="./images/crew/image-douglas-hurley.webp" type="image/webp">
+        <img src="./images/crew/image-douglas-hurley.png" alt="Portrait of Douglas Hurley" width="496" height="676">
+      </picture>
+    </div>
+
+    <div class="c-crew__panel" id="crew-panel-specialist" role="tabpanel" aria-labelledby="crew-tab-specialist" tabindex="0"@@if (context.selected !== 'specialist') { hidden}>
+      <div class="c-crew__text l-stack">
+        <div class="c-crew__heading l-stack">
+          <p class="c-crew__role">Mission Specialist</p>
+          <h2 class="c-crew__name">Mark Shuttleworth</h2>
+        </div>
+        <p class="c-crew__bio">
+          Mark Richard Shuttleworth is the founder and CEO of Canonical, the company behind
+          the Linux-based Ubuntu operating system. Shuttleworth became the first South
+          African to travel to space as a space tourist.
+        </p>
+      </div>
+      <picture class="c-crew__image">
+        <source srcset="./images/crew/image-mark-shuttleworth.webp" type="image/webp">
+        <img src="./images/crew/image-mark-shuttleworth.png" alt="Portrait of Mark Shuttleworth" width="496" height="676">
+      </picture>
+    </div>
+
+    <div class="c-crew__panel" id="crew-panel-pilot" role="tabpanel" aria-labelledby="crew-tab-pilot" tabindex="0"@@if (context.selected !== 'pilot') { hidden}>
+      <div class="c-crew__text l-stack">
+        <div class="c-crew__heading l-stack">
+          <p class="c-crew__role">Pilot</p>
+          <h2 class="c-crew__name">Victor Glover</h2>
+        </div>
+        <p class="c-crew__bio">
+          Pilot on the first operational flight of the SpaceX Crew Dragon to the
+          International Space Station. Glover is a commander in the U.S. Navy where
+          he pilots an F/A-18.He was a crew member of Expedition 64, and served as a
+          station systems flight engineer.
+        </p>
+      </div>
+      <picture class="c-crew__image">
+        <source srcset="./images/crew/image-victor-glover.webp" type="image/webp">
+        <img src="./images/crew/image-victor-glover.png" alt="Portrait of Victor Glover" width="496" height="676">
+      </picture>
+    </div>
+
+    <div class="c-crew__panel" id="crew-panel-engineer" role="tabpanel" aria-labelledby="crew-tab-engineer" tabindex="0"@@if (context.selected !== 'engineer') { hidden}>
+      <div class="c-crew__text l-stack">
+        <div class="c-crew__heading l-stack">
+          <p class="c-crew__role">Flight Engineer</p>
+          <h2 class="c-crew__name">Anousheh Ansari</h2>
+        </div>
+        <p class="c-crew__bio">
+          Anousheh Ansari is an Iranian American engineer and co-founder of Prodea Systems.
+          Ansari was the fourth self-funded space tourist, the first self-funded woman to
+          fly to the ISS, and the first Iranian in space.
+        </p>
+      </div>
+      <picture class="c-crew__image">
+        <source srcset="./images/crew/image-anousheh-ansari.webp" type="image/webp">
+        <img src="./images/crew/image-anousheh-ansari.png" alt="Portrait of Anousheh Ansari" width="496" height="676">
+      </picture>
+    </div>
+  </main>
