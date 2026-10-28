@@ -1,0 +1,230 @@
+@use '../abstracts' as *;
+
+// ------------------------------------------
+// 사이트 헤더
+// ------------------------------------------
+// 관계: 로고·(데스크톱 장식선)·내비를 한 flex 행에 두고, 모바일에서는 내비가 다음 줄을 차지한다.
+// 제한: z-index 10의 쌓임 맥락이 열린 패널과 토글을 함께 본문 위에 둔다.
+// 전환: 48em(768px) 미만은 줄바꿈 + 패딩 24px, 48em 이상은 한 줄·패딩 0, 64em(1024px) 이상은 위 패딩 40px과 장식선이 생긴다.
+.c-site-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s0) 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s1);
+
+  @include mq('tablet') {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding: 0;
+  }
+
+  @include mq('desktop') {
+    padding-block-start: 2.5rem; // 40px
+
+    // 관계: order로 로고와 내비 사이에 놓이고, 남은 폭을 채운다. 오른쪽 끝은 내비 바 위로 32px 겹친다.
+    // 제한: 기준 크기 0에서 늘어나므로 공간이 없으면 0까지 줄 수 있다.
+    &::after {
+      content: '';
+      position: relative;
+      z-index: 1;
+      order: 1;
+      flex: 1 1 0;
+      height: 1px;
+      margin-inline: 4rem -2rem; // 64px, -32px
+      background: rgb(255 255 255 / 25%);
+    }
+  }
+}
+
+// 관계: 왼쪽 여백을 margin으로 두어 링크 박스(포커스 링)는 로고 이미지만 감싼다.
+// 제한: 줄어들지 않는다. 태블릿에서는 여백 40px + 기준 88px = 128px을 차지하고 내비 바가 그 오른쪽을 채운다.
+// 전환: 64em 이상은 기준 크기 auto(로고 48px)와 여백 64px로 바뀐다.
+.c-site-header__logo {
+  flex-shrink: 0;
+
+  @include mq('tablet') {
+    flex-basis: 5.5rem; // 88px
+    margin-inline-start: 2.5rem; // 40px
+  }
+
+  @include mq('desktop') {
+    flex-basis: auto;
+    margin-inline-start: 4rem; // 64px
+  }
+}
+
+.c-site-header__logo-image {
+  width: 2.5rem; // 40px
+  height: 2.5rem;
+
+  @include mq('tablet') {
+    width: 3rem; // 48px
+    height: 3rem;
+  }
+}
+
+// ------------------------------------------
+// 메뉴 토글
+// ------------------------------------------
+// 관계: 헤더 쌓임 맥락 안에서 열린 패널(z-index 1)보다 위(z-index 2)에 남는다.
+// 제한: 음수 margin + padding으로 레이아웃 크기는 아이콘 그대로 두고 누를 수 있는 영역만 넓힌다.
+// 전환: 기본은 숨김. 48em 미만이면서 헤더에 .is-enhanced가 있을 때만 보인다(아래 상태 규칙).
+.c-nav-toggle {
+  position: relative;
+  z-index: 2;
+  display: none;
+  @include hit-area(24px, 21px, 44px);
+}
+
+.c-nav-toggle__icon--close {
+  display: none;
+}
+
+// ------------------------------------------
+// 내비게이션
+// ------------------------------------------
+// 관계: 모바일에서는 기준 크기 100%로 로고 아래 줄 전체를 차지한다. 태블릿 이상에서는 로고 오른쪽 공간을 채우는 반투명 바가 된다.
+// 제한: 고정 최소 폭이 없다. 공간이 부족하면 태블릿에서는 가장 긴 링크(+패딩) 폭까지 줄고 목록이 줄바꿈된다.
+// 전환: 64em 이상은 헤더 폭의 50% + 16px(최소 664px)을 기준 크기로 삼고, 최소 크기가 0이라 그보다 더 줄어들 수 있다.
+.c-nav {
+  flex-basis: 100%;
+
+  @include mq('tablet') {
+    order: 2;
+    flex: 1 1 auto;
+    padding-inline: 2.5rem; // 40px
+    background: rgb(255 255 255 / 5%);
+    backdrop-filter: blur(40px);
+  }
+
+  @include mq('desktop') {
+    flex: 0 1 max(50% + 1rem, 41.5rem); // 664px
+    min-inline-size: 0;
+    padding-inline: 4rem; // 64px
+  }
+}
+
+// 관계: 링크를 가로로 배치한다. 공간이 충분하면 한 줄이고, 부족하면 다음 줄로 넘어간다.
+// 전환: 48em 이상은 행 간격 없이 48px 간격으로 오른쪽 정렬한다.
+.c-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem var(--s1); // 12px 24px
+
+  @include mq('tablet') {
+    gap: 0 3rem; // 48px
+    justify-content: flex-end;
+  }
+}
+
+// 관계: 아래 테두리 3px을 투명하게 미리 차지해, 현재·hover 표시가 생겨도 크기와 위치가 바뀌지 않는다.
+// 전환: 48em 이상은 높이 96px로 내비 바를 채워 표시선이 바 아래 변에 붙는다.
+.c-nav__link {
+  display: flex;
+  gap: 0.75rem; // 12px
+  align-items: center;
+  padding-block: 0.5rem;
+  border: 0 solid transparent;
+  border-block-end-width: 3px;
+  @include font-style($font-size-nav, 400, normal, $font-condensed);
+  color: $white;
+  letter-spacing: $letter-spacing-nav;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: rgb(255 255 255 / 50%);
+  }
+
+  &[aria-current='page'] {
+    border-color: $white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  @include mq('tablet') {
+    position: relative;
+    block-size: 6rem; // 96px
+    padding-block: 0;
+
+    // 관계: 포커스 링은 링크 기준 absolute로, 위아래는 20px 안쪽, 좌우는 12px 바깥에 그린다.
+    // 제한: 좌우로 나간 12px은 링크 사이 간격(48px)과 내비 바 패딩 안에 머문다. 태블릿은 헤더 위 패딩이 0이라 바깥 outline이면 위쪽이 화면 밖으로 나간다.
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:focus-visible::before {
+      content: '';
+      position: absolute;
+      inset: 1.25rem -0.75rem; // 20px, 12px
+      border: 2px solid $white;
+    }
+  }
+}
+
+.c-nav__number {
+  font-weight: 700;
+  letter-spacing: $letter-spacing-nav-number;
+}
+
+// ------------------------------------------
+// 모바일 메뉴 상태 (헤더 루트의 상태 클래스 + 48em 미만 미디어 쿼리)
+// ------------------------------------------
+// 전환: 클래스가 없으면 위 기본 배치(목록이 로고 아래 줄)를 쓴다. 48em 이상에서는 두 클래스 모두 영향이 없다.
+// 전환: .is-enhanced이면 토글만 보이고 목록은 display: none으로 숨긴다.
+.c-site-header.is-enhanced {
+  @include mq-below('tablet') {
+    .c-nav-toggle {
+      display: inline-flex;
+    }
+
+    .c-nav {
+      display: none;
+    }
+  }
+}
+
+// 관계: 열린 패널은 뷰포트 오른쪽에 고정되어 화면 높이 전체를 덮고, 문서 흐름에서 빠진다.
+// 제한: 폭 254px(화면이 더 좁으면 100%). 위 패딩 133px이 닫기 버튼 영역을 비우며, 목록은 세로로 32px 간격이다.
+// 전환: 현재·hover 표시는 아래 테두리 대신 오른쪽 테두리 3px로 옮겨 간다.
+.c-site-header.is-menu-open {
+  @include mq-below('tablet') {
+    .c-nav {
+      position: fixed;
+      inset: 0 0 0 auto;
+      z-index: 1;
+      display: block;
+      inline-size: min(15.875rem, 100%); // 254px
+      padding: 8.3125rem 0 2rem 2rem; // 133px 0 32px 32px
+      background: rgb(11 13 23 / 15%);
+      backdrop-filter: blur(40px);
+    }
+
+    .c-nav__list {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 2rem; // 32px
+    }
+
+    .c-nav__link {
+      padding-block: 0;
+      border-block-end-width: 0;
+      border-inline-end-width: 3px;
+    }
+
+    .c-nav-toggle__icon--open {
+      display: none;
+    }
+
+    .c-nav-toggle__icon--close {
+      display: block;
+    }
+  }
+}
