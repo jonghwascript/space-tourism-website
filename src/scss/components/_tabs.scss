@@ -1,0 +1,69 @@
+@use '../abstracts' as *;
+
+// ------------------------------------------
+// 탭 (Destination·Crew·Technology 공통)
+// ------------------------------------------
+// 관계: 선택 상태는 클래스가 아니라 aria-selected로 건다. 전환 스크립트가 속성만 바꾸면 모양이 따라온다.
+// 제한: 탭 전환 스크립트는 아직 없다. 비선택 탭은 hover 표시만 있고 눌러도 패널이 바뀌지 않는다.
+// 전환: 변형(--underline 등)마다 아래에서 정한다. 묶음 정렬은 각 페이지가 정한다.
+.c-tabs__tab {
+  color: $blue-300;
+  text-transform: uppercase;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+
+  &[aria-selected='true'] {
+    color: $white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// ------------------------------------------
+// 밑줄형 (Destination)
+// ------------------------------------------
+// 제한: 표시선은 처음부터 투명한 3px 테두리로 두어 선택·hover로 색만 바뀌고 상자 크기는 그대로다.
+// 전환: 모바일 14px·자간 2.1px, 48em 이상 16px·자간 2px. 높이 32px, 탭 간격 32px.
+.c-tabs--underline {
+  --space: 2rem; // 32px
+
+  .c-tabs__tab {
+    align-items: flex-start;
+    block-size: 2rem; // 32px: 글자 + 8px + 표시선 3px
+    border-block-end: 3px solid transparent;
+    @include font-style(0.875rem, 400, 1.2, $font-condensed); // 14px
+    letter-spacing: 0.13125rem; // 2.1px
+
+    @include mq('tablet') {
+      font-size: 1rem; // 16px
+      letter-spacing: 0.125rem; // 2px
+    }
+
+    &[aria-selected='true'] {
+      border-block-end-color: $white;
+    }
+
+    @media (hover: hover) {
+      &:hover:not([aria-selected='true']) {
+        border-block-end-color: rgb(255 255 255 / 50%);
+      }
+    }
+
+    // 강제 색상에서는 투명 테두리도 시스템 글자색으로 칠해져 모든 탭에 선이 생긴다.
+    // 헤더 내비와 같이 비선택은 배경색(Canvas), hover는 LinkText, 선택은 CanvasText로 둔다.
+    @media (forced-colors: active) {
+      border-block-end-color: Canvas;
+
+      &:hover {
+        border-block-end-color: LinkText;
+      }
+
+      &[aria-selected='true'] {
+        border-block-end-color: CanvasText;
+      }
+    }
+  }
+}

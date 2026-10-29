@@ -1,0 +1,231 @@
+@use '../abstracts' as *;
+
+// ------------------------------------------
+// Destination 페이지 골격과 배경
+// ------------------------------------------
+// 관계: 홈과 같이 body를 헤더·main 2행 그리드로 만들어 main이 헤더 아래 남은 높이를 채운다.
+// 제한: 최소 높이라 내용이 길면 늘어난다.
+// 전환: 48em·64em에서 배경 이미지만 바뀐다. 이미지를 못 불러오면 blue-900이 보인다.
+.c-page--destination {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  min-block-size: 100vh;
+  min-block-size: 100svh;
+  background: $blue-900 url('../images/destination/background-destination-mobile.jpg') center / cover no-repeat;
+
+  @include mq('tablet') {
+    background-image: url('../images/destination/background-destination-tablet.jpg');
+  }
+
+  @include mq('desktop') {
+    background-image: url('../images/destination/background-destination-desktop.jpg');
+  }
+}
+
+// ------------------------------------------
+// 본문(main)
+// ------------------------------------------
+// 관계: DOM은 제목 → 탭 목록 → 패널(이미지·텍스트·통계)이지만, 화면은 Figma대로 이미지를 탭 위(데스크톱은 왼쪽)에 둔다.
+//       main을 영역 그리드로 만들고, 보이는 패널은 subgrid로 main의 트랙을 물려받아 자식을 각 영역에 놓는다.
+//       포커스 순서(탭 → 패널)는 DOM과 화면이 같다. 이미지는 포커스 대상이 아니다.
+// 제한: subgrid가 없는 브라우저에서는 세로 flex로 DOM 순서(탭 → 이미지 → 텍스트)대로 쌓인다.
+//       간격은 그리드 gap이 아니라 각 요소의 margin이라 두 배치에서 같다.
+// 전환: 모바일 패딩 24px, 48em 이상 40px, 64em 이상 최대 폭 1110px(좌우 최소 40px)·위아래 48px의 2열.
+// 높이: 이미지 행(데스크톱은 위아래 빈 행)이 1fr이라 남은 높이를 나눠 갖는다(Figma 이미지 영역 flex-1).
+.c-destination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--s1); // 24px
+  text-align: center;
+
+  @include mq('tablet') {
+    padding: 2.5rem; // 40px
+  }
+
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-template-areas:
+      'title'
+      'image'
+      'tabs'
+      'text'
+      'stats';
+    grid-template-rows: auto 1fr auto auto auto;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+
+    @include mq('desktop') {
+      grid-template-areas:
+        'title title'
+        'image .'
+        'image tabs'
+        'image text'
+        'image stats'
+        'image .';
+      grid-template-rows: auto 1fr auto auto auto 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2rem; // 32px
+    }
+  }
+
+  @include mq('desktop') {
+    inline-size: min(69.375rem, 100% - 5rem); // 1110px, 좌우 40px
+    margin-inline: auto;
+    padding: 3rem 0; // 48px
+    text-align: start;
+  }
+}
+
+// 제목은 공통 컴포넌트(_page-title.scss). 여기서는 본문 안 위치와 아래 간격만 정한다.
+.c-destination > .c-page-title {
+  grid-area: title;
+  align-self: stretch;
+  justify-self: stretch;
+  margin-block-end: var(--s1); // 24px
+}
+
+.c-destination__panel {
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    grid-template-rows: subgrid;
+    grid-template-columns: subgrid;
+    justify-items: center;
+  }
+}
+
+// ------------------------------------------
+// 목적지 이미지
+// ------------------------------------------
+// 제한: 정사각형 고정 크기. 화면·열이 더 좁으면 폭에 맞춰 줄어든다. 데스크톱 480px은 원본(445px)보다 크다(Figma 지시).
+// 전환: 150 → 48em 이상 300 → 64em 이상 480px. 데스크톱은 왼쪽 열 가운데.
+.c-destination__image {
+  grid-area: image;
+  align-self: center;
+  inline-size: min(9.375rem, 100%); // 150px
+
+  @include mq('tablet') {
+    inline-size: min(18.75rem, 100%); // 300px
+  }
+
+  @include mq('desktop') {
+    inline-size: min(30rem, 100%); // 480px
+  }
+
+  img {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 1;
+  }
+}
+
+// ------------------------------------------
+// 탭·텍스트·통계 묶음
+// ------------------------------------------
+// 관계: 셋이 같은 폭과 가운데 위치를 가져 한 열처럼 보인다(Figma Explanation).
+// 전환: 모바일·태블릿 최대 514px 가운데, 이미지와 탭 사이 32px. 데스크톱 445px 오른쪽 열 가운데, 묶음 안 간격 40px.
+.c-destination__tabs,
+.c-destination__text,
+.c-destination__stats {
+  inline-size: min(32.125rem, 100%); // 514px
+
+  @include mq('desktop') {
+    inline-size: min(27.8125rem, 100%); // 445px
+  }
+}
+
+// 보이는 패널 상자가 subgrid로 탭 행까지 덮고 DOM에서 뒤에 있어 위에 그려지므로,
+// 탭을 패널 위로 올려 포인터(hover·클릭)를 받게 한다. 그리드 항목이라 position 없이 z-index가 적용된다.
+.c-destination__tabs {
+  z-index: 1;
+  grid-area: tabs;
+  margin-block-start: 2rem; // 32px
+
+  @include mq('desktop') {
+    justify-content: flex-start;
+    margin-block-start: 0;
+  }
+}
+
+.c-destination__text {
+  --space: 1rem; // 이름–설명 16px
+
+  grid-area: text;
+  margin-block-start: var(--s1); // 24px
+
+  @include mq('desktop') {
+    margin-block-start: 2.5rem; // 40px
+  }
+}
+
+// 제한: 한 단어라 줄바꿈이 안 되므로 화면 폭 18%를 상한으로 둬 좁은 화면·글자 확대에서 넘치지 않게 한다.
+// 기본 글꼴 크기에서는 상한에 닿지 않아 56/80/96px 그대로다.
+.c-destination__name {
+  @include font-style(min(3.5rem, 18vw), 400, 1, $font-display); // 56px
+  color: $white;
+  text-transform: uppercase;
+
+  @include mq('tablet') {
+    font-size: min(5rem, 18vw); // 80px
+  }
+
+  @include mq('desktop') {
+    font-size: 6rem; // 96px
+  }
+}
+
+.c-destination__description {
+  @include font-style(0.9375rem, 400, 1.8); // 15px
+  color: $blue-300;
+
+  @include mq('tablet') {
+    font-size: 1rem; // 16px
+  }
+
+  @include mq('desktop') {
+    font-size: 1.125rem; // 18px
+  }
+}
+
+// ------------------------------------------
+// 통계
+// ------------------------------------------
+// 관계: 위 테두리가 Figma의 구분선(1px white 25%)이고, 패딩이 구분선–통계 간격이다.
+// 전환: 모바일 세로 쌓기(간격 24px), 48em 이상 같은 폭 2열(간격 24px). 데스크톱은 구분선 앞뒤 40px.
+.c-destination__stats {
+  display: grid;
+  grid-area: stats;
+  gap: var(--s1); // 24px
+  margin-block-start: var(--s1); // 24px
+  padding-block-start: var(--s1); // 24px
+  border-block-start: 1px solid rgb(255 255 255 / 25%);
+
+  @include mq('tablet') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mq('desktop') {
+    margin-block-start: 2.5rem; // 40px
+    padding-block-start: 2.5rem; // 40px
+  }
+}
+
+.c-destination__stat {
+  --space: 0.75rem; // 라벨–값 12px
+}
+
+.c-destination__stat-label {
+  @include font-style(0.875rem, 400, 1.2, $font-condensed); // 14px
+  color: $blue-300;
+  letter-spacing: 0.125rem; // 2px
+  text-transform: uppercase;
+}
+
+.c-destination__stat-value {
+  @include font-style(1.75rem, 400, 1.2, $font-display); // 28px
+  color: $white;
+  text-transform: uppercase;
+}

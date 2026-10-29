@@ -56,3 +56,8 @@ button {
   cursor: pointer;
   box-shadow: none;
 }
+
+// 컴포넌트가 display를 지정해도 hidden 속성(탭 패널 등)이 이기게 한다.
+[hidden] {
+  display: none !important;
+}

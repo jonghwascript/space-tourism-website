@@ -7,7 +7,10 @@
 
 @use 'components/skip-link';
 @use 'components/site-header';
+@use 'components/page-title';
+@use 'components/tabs';
 
 @use 'pages/home';
+@use 'pages/destination';
 
 @use 'utilities/utilities'; // 같은 명시도에서 다른 규칙을 이기도록 마지막에
