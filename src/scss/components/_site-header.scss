@@ -130,7 +130,7 @@
   align-items: center;
   padding-block: 0.5rem;
   border: 0 solid transparent;
-  border-block-end-width: 3px;
+  border-block-end-width: 3px;  // 두께가 3px
   @include font-style($font-size-nav, 400, normal, $font-condensed);
   color: $white;
   letter-spacing: $letter-spacing-nav;
@@ -178,7 +178,7 @@
     &:focus-visible::before {
       content: '';
       position: absolute;
-      inset: 1.25rem -0.75rem; // 20px, 12px
+      inset: 1.25rem -0.75rem; // 20px, 12px (왼쪽 바깥쪽, 오른쪽 바깥쪽으로 이동) 
       border: 2px solid $white;
     }
   }
