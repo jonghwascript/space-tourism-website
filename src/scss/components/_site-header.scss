@@ -72,12 +72,13 @@
 // ------------------------------------------
 // 관계: 헤더 쌓임 맥락 안에서 열린 패널(z-index 1)보다 위(z-index 2)에 남는다.
 // 제한: 음수 margin + padding으로 레이아웃 크기는 아이콘 그대로 두고 누를 수 있는 영역만 넓힌다.
-// 전환: 기본은 숨김. 48em 미만이면서 헤더에 .is-enhanced가 있을 때만 보인다(아래 상태 규칙).
+// 전환: 기본은 숨김. 48em 미만이면서 <html>에 .has-js가 있을 때만 보인다(아래 상태 규칙).
 .c-nav-toggle {
   position: relative;
   z-index: 2;
   display: none;
   @include hit-area(24px, 21px, 44px);
+  color: $blue-300; // 인라인 SVG 아이콘이 currentColor로 따른다
 }
 
 .c-nav-toggle__icon--close {
@@ -149,6 +150,20 @@
     transition: none;
   }
 
+  // 강제 색상 모드는 투명 테두리도 시스템 색으로 칠해 모든 링크에 표시선이 생긴다.
+  // 시스템 색 키워드는 바뀌지 않으므로 배경색(Canvas)으로 숨기고 현재 링크만 CanvasText로 그린다.
+  @media (forced-colors: active) {
+    border-color: Canvas;
+
+    &:hover {
+      border-color: LinkText;
+    }
+
+    &[aria-current='page'] {
+      border-color: CanvasText;
+    }
+  }
+
   @include mq('tablet') {
     position: relative;
     block-size: 6rem; // 96px
@@ -175,11 +190,12 @@
 }
 
 // ------------------------------------------
-// 모바일 메뉴 상태 (헤더 루트의 상태 클래스 + 48em 미만 미디어 쿼리)
+// 모바일 메뉴 상태 (<html>의 .has-js, 헤더 루트의 .is-menu-open + 48em 미만 미디어 쿼리)
 // ------------------------------------------
 // 전환: 클래스가 없으면 위 기본 배치(목록이 로고 아래 줄)를 쓴다. 48em 이상에서는 두 클래스 모두 영향이 없다.
-// 전환: .is-enhanced이면 토글만 보이고 목록은 display: none으로 숨긴다.
-.c-site-header.is-enhanced {
+// 전환: .has-js이면 토글만 보이고 목록은 display: none으로 숨긴다.
+// 제한: .has-js는 head.html 인라인 스크립트가 첫 그리기 전에 붙이고, main.js를 불러오지 못하거나 요소가 없으면 지운다.
+.has-js .c-site-header {
   @include mq-below('tablet') {
     .c-nav-toggle {
       display: inline-flex;
@@ -193,6 +209,7 @@
 
 // 관계: 열린 패널은 뷰포트 오른쪽에 고정되어 화면 높이 전체를 덮고, 문서 흐름에서 빠진다.
 // 제한: 폭 254px(화면이 더 좁으면 100%). 위 패딩 133px이 닫기 버튼 영역을 비우며, 목록은 세로로 32px 간격이다.
+//       화면이 낮거나 글자를 키워 목록이 넘치면 패널 안에서 세로로 스크롤된다.
 // 전환: 현재·hover 표시는 아래 테두리 대신 오른쪽 테두리 3px로 옮겨 간다.
 .c-site-header.is-menu-open {
   @include mq-below('tablet') {
@@ -202,9 +219,18 @@
       z-index: 1;
       display: block;
       inline-size: min(15.875rem, 100%); // 254px
+      overflow-y: auto;
+      overscroll-behavior: contain;
       padding: 8.3125rem 0 2rem 2rem; // 133px 0 32px 32px
-      background: rgb(11 13 23 / 15%);
+      // Figma는 15%지만, Destination 행성 이미지 위에서 링크 글자 대비가 4.5:1에 못 미쳐 30%로 올렸다.
+      background: rgb(11 13 23 / 30%);
       backdrop-filter: blur(40px);
+
+      // 강제 색상 모드는 배경 알파를 유지해 본문이 비치므로 불투명 시스템 배경으로 바꾼다.
+      @media (forced-colors: active) {
+        background: Canvas;
+        backdrop-filter: none;
+      }
     }
 
     .c-nav__list {
@@ -213,10 +239,24 @@
       gap: 2rem; // 32px
     }
 
+    // 관계: 포커스 링은 링크 기준 absolute로, 위·아래·왼쪽은 4px 바깥, 오른쪽은 표시선 3px + 4px 안쪽에 그린다.
+    // 제한: 패널이 스크롤 영역이라 바깥 outline이면 오른쪽 변이 패널 경계에 잘린다. 링크는 패널 오른쪽 끝까지 닿는다.
     .c-nav__link {
+      position: relative;
       padding-block: 0;
       border-block-end-width: 0;
       border-inline-end-width: 3px;
+
+      &:focus-visible {
+        outline: none;
+      }
+
+      &:focus-visible::before {
+        content: '';
+        position: absolute;
+        inset: -0.25rem 0.25rem -0.25rem -0.25rem; // 4px, 오른쪽은 표시선 안쪽 4px
+        border: 2px solid $white;
+      }
     }
 
     .c-nav-toggle__icon--open {

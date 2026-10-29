@@ -1,28 +1,24 @@
 // ------------------------------------------
 // 모바일 메뉴
 // ------------------------------------------
-// 관계: 헤더 루트의 상태 클래스(.is-enhanced, .is-menu-open)만 바꾸고, 표시는 _site-header.scss가 맡는다.
-// 제한: 필요한 요소가 하나라도 없으면 활성화하지 않아 스크립트 없는 배치가 그대로 남는다.
+// 관계: 헤더 루트의 상태 클래스(.is-menu-open)와 토글의 aria-expanded만 바꾸고, 표시는 _site-header.scss가 맡는다.
+// 제한: <html>의 .has-js는 head.html이 미리 붙인다. 필요한 요소가 하나라도 없으면 지워 스크립트 없는 배치로 돌린다.
 // 전환: 768px(48em) 이상으로 넓어지면 닫힘으로 초기화한다. SCSS mq-below('tablet')과 같은 식을 쓴다.
 {
   const header = document.querySelector('.c-site-header');
   const toggle = header?.querySelector('.c-nav-toggle');
-  const label = toggle?.querySelector('.u-sr-only');
   const list = document.getElementById(toggle?.getAttribute('aria-controls'));
 
-  if (header && toggle && label && list) {
+  if (header && toggle && list) {
     const mobile = window.matchMedia('(width < 48em)');
 
-    // 상태 클래스·aria-expanded·버튼 이름을 항상 함께 바꾼다.
+    // 버튼 이름("Menu")은 고정하고 상태는 aria-expanded로만 전달한다.
     const setOpen = (isOpen) => {
       header.classList.toggle('is-menu-open', isOpen);
       toggle.setAttribute('aria-expanded', String(isOpen));
-      label.textContent = isOpen ? 'Close menu' : 'Open menu';
     };
 
     const isOpen = () => header.classList.contains('is-menu-open');
-
-    header.classList.add('is-enhanced');
 
     toggle.addEventListener('click', () => {
       setOpen(!isOpen());
@@ -39,8 +35,16 @@
       if (isOpen() && !header.contains(event.target)) setOpen(false);
     });
 
+    // 포커스가 헤더 밖 요소로 옮겨 가면 닫아, 패널 뒤에 가려진 요소가 포커스를 받지 않게 한다.
+    // relatedTarget이 없으면(패널 빈 곳 클릭, 창 전환) 열린 상태를 유지한다.
+    header.addEventListener('focusout', (event) => {
+      if (isOpen() && event.relatedTarget && !header.contains(event.relatedTarget)) setOpen(false);
+    });
+
     mobile.addEventListener('change', (event) => {
       if (!event.matches) setOpen(false);
     });
+  } else {
+    document.documentElement.classList.remove('has-js');
   }
 }
