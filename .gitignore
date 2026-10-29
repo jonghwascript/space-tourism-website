@@ -45,6 +45,6 @@ README-template.md
 style-guide.md
 design/*
 storybook-static
-openspec/*
 .claude/*
-doc/*
+/doc
+/openspec/**/screenshots/
