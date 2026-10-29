@@ -1,5 +1,4 @@
 // Origin: https://every-layout.dev/layouts
-// 🚨 모든 기본 변수(Default Vars) 지정 완료 및 오타 수정판
 
 // ----------------------------------
 // The Stack: 세로 레이아웃의 지배자
@@ -153,12 +152,12 @@
   //| padding | ←──── 60ch content ────→ | padding |
 }
 
-/* 옵션 1: 텍스트 자체도 가운데 정렬하고 싶을 때 (히어로 섹션 등) */
+// 옵션 1: 텍스트 자체도 가운데 정렬하고 싶을 때 (히어로 섹션 등)
 .l-center[data-align-text] {
   text-align: center;
 }
 
-/* 옵션 2: 자식 요소들을 고유 크기대로 중앙에 모으고 싶을 때 */
+// 옵션 2: 자식 요소들을 고유 크기대로 중앙에 모으고 싶을 때
 .l-center[data-intrinsic] {
   display: flex;
   flex-direction: column;
@@ -187,7 +186,7 @@
   grid-column: content;
 }
 
-/* 옵션: 화면 끝까지 쓰는 자식 (전체 폭 이미지 등) */
+// 옵션: 화면 끝까지 쓰는 자식 (전체 폭 이미지 등)
 .l-content-grid > [data-full] {
   grid-column: full;
 }
@@ -223,6 +222,9 @@
 // ==========================================
 // The Sidebar (사이드바 - 좁아지면 위아래로 떨어짐)
 // ==========================================
+// 관계: 첫 자식은 20rem을 기준으로, 마지막 자식은 남은 폭을 우선 배분받으며 한 행을 이룬다.
+// 제한: 마지막 자식은 컨테이너 폭의 최소 50%를 차지한다. 콘텐츠의 자동 최소 크기도 배치에 영향을 준다.
+// 전환: 첫 자식의 기준 크기·마지막 자식의 최소 크기·gap을 한 행에 수용할 공간이 부족하면 줄바꿈한다.
 .l-with-sidebar {
   display: flex;
   flex-wrap: wrap;
@@ -230,7 +232,7 @@
   gap: var(--gutter, var(--s1, 1.5rem));
 }
 .l-with-sidebar > :first-child {
-  // 사이드바로 쓰일 때의 기본 너비
+  // 사이드바의 flex 기준 크기이며 최종 너비는 공간 배분에 따라 달라진다.
   flex-basis: 20rem;
   flex-grow: 1;
 }
@@ -238,7 +240,7 @@
   // 처음엔 너비 0에서 시작해서 남은 공간을 꽉 채움
   flex-basis: 0;
   flex-grow: 999;
-  // 요소들의 너비가 같아지는 시점에 줄바꿈 처리
+  // 본문이 컨테이너 폭의 절반보다 좁아지지 않게 한다.
   min-inline-size: 50%;
 }
 
@@ -273,8 +275,8 @@
   display: flex;
   flex-direction: column;
   // 최소 높이를 화면 전체(100vh)로 설정
-  min-block-size: 100vh;    /* 구형 브라우저를 위한 대비책 (Fallback) */
-  min-block-size: 100dvh;   /* 주소창을 고려하여 동적으로 변하는 100% 높이 */
+  min-block-size: 100vh;    // 구형 브라우저를 위한 대비책 (Fallback)
+  min-block-size: 100dvh;   // 주소창을 고려하여 동적으로 변하는 100% 높이
   // 패딩 값 설정
   padding: var(--space);
 }
@@ -357,7 +359,6 @@
   // Firefox용 스크롤바 색상
   scrollbar-color: var(--color-light) var(--color-dark);
 }
-// 🚨 버그 수정: 원본의 reel-l(웹컴포넌트)을 .reel(클래스)로 모두 변경
 .l-reel::-webkit-scrollbar {
   // 스크롤바 높이
   block-size: 1rem;
@@ -367,7 +368,6 @@
 }
 .l-reel::-webkit-scrollbar-thumb {
   background-color: var(--color-dark);
-  // 🚨 오타 수정: var(--color- dark) -> var(--color-dark)
   // 선형 그래디언트를 사용해 검은 막대 안에 흰색 썸네일을 '삽입(inset)'한 것처럼 연출
   background-image: linear-gradient(
     var(--color-dark) 0,
@@ -391,13 +391,14 @@
 // ==========================================
 // The Imposter (모달, 다이얼로그용 중앙 강제 배치)
 // ==========================================
+// 관계: 위치 기준 영역의 50% 지점에 놓고, 자신의 크기 절반만큼 되돌려 가운데를 맞춘다.
+// 제한: 기본 absolute는 보통 가장 가까운 positioned 조상을 기준으로 하므로, 의도한 부모에 position을 지정한다.
+// 전환: --positioning을 fixed로 바꾸면 보통 뷰포트가 기준이다. transform 등이 있는 조상은 위치 기준을 바꿀 수 있다.
 .l-imposter {
   // 포지셔닝 방식 선택 (기본 absolute)
   position: var(--positioning, absolute);
-  // 상단 좌측 모서리를 중앙에 배치
   inset-block-start: 50%;
   inset-inline-start: 50%;
-  // 요소의 정중앙이 컨테이너의 정중앙이 되도록 재배치
   transform: translate(-50%, -50%);
 }
 .l-imposter.contain {
