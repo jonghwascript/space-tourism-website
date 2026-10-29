@@ -113,10 +113,10 @@
     inline-size: min(30rem, 100%); // 480px
   }
 
+  // 폭은 width 속성(480)이 리셋의 max-width: 100%에 잘려 picture 폭을 따른다.
+  // height 속성(480)이 남아 세로로 늘어나지 않게 높이만 비율에 맡긴다.
   img {
-    inline-size: 100%;
     block-size: auto;
-    aspect-ratio: 1;
   }
 }
 
