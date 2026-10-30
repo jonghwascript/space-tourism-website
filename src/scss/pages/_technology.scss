@@ -1,0 +1,244 @@
+@use '../abstracts' as *;
+
+// ------------------------------------------
+// Technology 페이지 골격과 배경
+// ------------------------------------------
+// 관계: 홈·Destination·Crew와 같이 body를 헤더·main 2행 그리드로 만들어 main이 헤더 아래 남은 높이를 채운다.
+// 제한: 최소 높이라 내용이 길면 늘어난다.
+// 전환: 48em·64em에서 배경 이미지만 바뀐다. 이미지를 못 불러오면 blue-900이 보인다.
+.c-page--technology {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  min-block-size: 100vh;
+  min-block-size: 100svh;
+  background: $blue-900 url('../images/technology/background-technology-mobile.jpg') center / cover no-repeat;
+
+  @include mq('tablet') {
+    background-image: url('../images/technology/background-technology-tablet.jpg');
+  }
+
+  @include mq('desktop') {
+    background-image: url('../images/technology/background-technology-desktop.jpg');
+  }
+}
+
+// ------------------------------------------
+// 본문(main)
+// ------------------------------------------
+// 관계: DOM은 제목 → 숫자 탭 → 패널(텍스트·이미지)이다. 모바일·태블릿 화면은 이미지 → 숫자 탭 → 텍스트,
+//       데스크톱은 숫자 탭 → 텍스트 → 이미지 가로 배치다. 보이는 패널이 subgrid로 main의 트랙을 물려받는다.
+// 제한: subgrid 미지원 시 세로 flex로 DOM 순서(제목 → 숫자 탭 → 텍스트 → 이미지)를 따른다. 간격은 각 margin이다.
+// 전환: 기본 패딩은 위·좌우 24px, 아래 48px이고 48em 이상에서는 사방 40px이다.
+//       64em 이상에서는 오른쪽 정렬·최대 폭 1275px·위아래 48px이며, subgrid 지원 시에만 3열로 바뀐다.
+//       이때 텍스트 열은 최소 491px을 확보하고 남는 너비를 이미지 열과 나눈다.
+.c-technology {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--s1) var(--s1) 3rem; // 24px 24px 48px
+  text-align: center;
+
+  @include mq('tablet') {
+    padding: 2.5rem; // 40px
+  }
+
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-template-areas:
+      'title'
+      'image'
+      'tabs'
+      'text';
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start; // 남는 높이는 아래에 두어 행이 늘어나지 않게 한다
+    justify-items: center;
+
+    @include mq('desktop') {
+      grid-template-areas:
+        'title title title'
+        'tabs text image';
+      grid-template-rows: auto 1fr;
+      grid-template-columns: auto max(30.6875rem, 50% - 10rem) minmax(0, 1fr); // 491px
+      column-gap: 2rem; // 32px
+      align-content: stretch;
+      align-items: center;
+      justify-items: stretch;
+    }
+  }
+
+  @include mq('desktop') {
+    inline-size: min(79.6875rem, 100% - 2.5rem); // 1275px, 왼쪽 40px
+    margin-inline-start: auto;
+    padding: 3rem 0; // 48px
+    text-align: start;
+  }
+}
+
+// 제목은 공통 컴포넌트(_page-title.scss). 여기서는 본문 안 위치와 아래 간격만 정한다.
+.c-technology > .c-page-title {
+  grid-area: title;
+  align-self: stretch;
+  justify-self: stretch;
+  margin-block-end: var(--s1); // 24px
+}
+
+.c-technology__panel {
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    grid-template-rows: subgrid;
+    grid-template-columns: subgrid;
+    justify-items: center;
+
+    @include mq('desktop') {
+      align-items: center;
+      justify-items: stretch;
+    }
+  }
+
+  // 데스크톱 패널은 화면 오른쪽 끝까지 닿으므로 포커스 테두리를 상자 안쪽에 그린다.
+  @include mq('desktop') {
+    &:focus-visible {
+      outline-offset: -2px;
+    }
+  }
+}
+
+// ------------------------------------------
+// 소개 문구·이름·설명
+// ------------------------------------------
+// 제한: 기본 최대 514px, 태블릿 최대 512px 가운데. 데스크톱은 텍스트 열 안에서 최대 640px이다.
+// 전환: 모바일·태블릿 숫자 탭 아래 40px, 이름 묶음–설명 16px. 데스크톱 행 세로 가운데, 이름 묶음–설명 24px.
+.c-technology__text {
+  --space: 1rem; // 이름 묶음–설명 16px
+
+  grid-area: text;
+  inline-size: min(32.125rem, 100%); // 514px
+  margin-block-start: 2.5rem; // 40px
+
+  @include mq('tablet') {
+    inline-size: min(32rem, 100%); // 512px
+  }
+
+  @include mq('desktop') {
+    --space: 1.5rem; // 24px
+
+    inline-size: auto;
+    max-inline-size: 40rem; // 640px
+    margin-block-start: 0;
+  }
+}
+
+.c-technology__heading {
+  --space: 1rem; // 소개 문구–이름 16px
+}
+
+.c-technology__eyebrow,
+.c-technology__name {
+  text-transform: uppercase;
+}
+
+// white 50%는 opacity 대신 글자색 알파로 준다. 강제 색상에서 글자가 흐려지지 않는다.
+.c-technology__eyebrow {
+  @include font-style(1.125rem, 400, 1.15, $font-display); // 18px
+  color: rgb(255 255 255 / 50%);
+
+  @include mq('tablet') {
+    font-size: 1.5rem; // 24px
+  }
+
+  @include mq('desktop') {
+    font-size: 2rem; // 32px
+  }
+}
+
+.c-technology__name {
+  @include font-style(1.5rem, 400, 1.15, $font-display); // 24px
+  color: $white;
+
+  @include mq('tablet') {
+    font-size: 2.5rem; // 40px
+  }
+
+  @include mq('desktop') {
+    font-size: 3.5rem; // 56px
+  }
+}
+
+.c-technology__description {
+  @include font-style(0.9375rem, 400, 1.8); // 15px
+  color: $blue-300;
+
+  @include mq('tablet') {
+    font-size: 1rem; // 16px
+  }
+
+  @include mq('desktop') {
+    font-size: 1.125rem; // 18px
+  }
+}
+
+// ------------------------------------------
+// 숫자 탭 위치
+// ------------------------------------------
+// 관계: 원 모양은 공통 컴포넌트(_tabs.scss의 --numbers). 여기서는 영역과 간격만 정한다.
+//       보이는 패널 상자가 subgrid로 탭 영역까지 덮고 DOM에서 뒤에 있어 위에 그려지므로,
+//       탭을 패널 위로 올려 포인터를 받게 한다. 그리드 항목이라 position 없이 z-index가 적용된다.
+// 전환: 모바일·태블릿 이미지 아래 32px 가운데. 데스크톱 왼쪽 열, 열 간격 32px에 오른쪽 32px를 더해 텍스트와 64px.
+.c-technology__tabs {
+  z-index: 1;
+  grid-area: tabs;
+  margin-block-start: 2rem; // 32px
+
+  @include mq('desktop') {
+    justify-self: start;
+    margin-block-start: 0;
+    margin-inline-end: 2rem; // 32px
+  }
+}
+
+// ------------------------------------------
+// 기술 이미지
+// ------------------------------------------
+// 관계: 64em 미만은 가로 이미지, 이상은 세로 이미지를 상자에 cover로 채운다.
+// 제한: 모바일·태블릿은 본문 패딩을 음수 margin으로 넘어 화면 폭 전체를 채운다.
+//       64em 미만에서는 이미지 폭이 768px보다 좁아지지 않아 상자 가운데를 기준으로 양옆이 잘린다.
+//       잘린 부분은 overflow: clip이라 스크롤 폭에 영향이 없다.
+// 전환: 높이 258 → 48em 이상 357 → 64em 이상 600px. 데스크톱은 이미지 열 폭 전체, 화면 오른쪽 끝까지.
+.c-technology__image {
+  grid-area: image;
+  align-self: stretch;
+  justify-self: stretch;
+  overflow: clip;
+  margin-block-start: 4rem; // 64px
+  margin-inline: calc(var(--s1) * -1); // 24px
+
+  @include mq('tablet') {
+    margin-inline: -2.5rem; // 40px
+  }
+
+  @include mq('desktop') {
+    align-self: center;
+    margin: 0;
+  }
+
+  img {
+    inline-size: max(48rem, 100%); // 768px
+    max-inline-size: none;
+    block-size: 16.125rem; // 258px
+    margin-inline: calc((100% - max(48rem, 100%)) / 2);
+    object-fit: cover;
+
+    @include mq('tablet') {
+      block-size: 22.3125rem; // 357px
+    }
+
+    @include mq('desktop') {
+      inline-size: 100%;
+      block-size: 37.5rem; // 600px
+      margin-inline: 0;
+    }
+  }
+}

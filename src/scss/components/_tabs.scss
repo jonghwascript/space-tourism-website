@@ -130,3 +130,78 @@
     }
   }
 }
+
+// ------------------------------------------
+// 숫자형 (Technology)
+// ------------------------------------------
+// 관계: 탭 목록이 버튼을 가로로 묶어 가운데 정렬하고, 각 버튼은 숫자를 원 가운데에 둔다.
+// 제한: 버튼의 가로·세로 크기가 같고 간격은 목록의 gap으로 정한다.
+// 전환: 기본 버튼 40px·가로 간격 16px, 48em 이상 버튼 56px, 64em 이상 버튼 80px·세로 간격 32px.
+.c-tabs--numbers {
+  display: flex;
+  gap: 1rem; // 16px
+  justify-content: center;
+
+  @include mq('desktop') {
+    flex-direction: column;
+    gap: 2rem; // 32px
+  }
+
+  .c-tabs__tab {
+    inline-size: 2.5rem; // 40px
+    block-size: 2.5rem;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 50%;
+    @include font-style(1.125rem, 400, 1, $font-display); // 18px
+    color: $white;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease;
+
+    @include mq('tablet') {
+      inline-size: 3.5rem; // 56px
+      block-size: 3.5rem;
+      font-size: 1.5rem; // 24px
+    }
+
+    @include mq('desktop') {
+      inline-size: 5rem; // 80px
+      block-size: 5rem;
+      font-size: 2rem; // 32px
+    }
+
+    &[aria-selected='true'] {
+      border-color: $white;
+      background-color: $white;
+      color: $blue-900;
+    }
+
+    @media (hover: hover) {
+      &:hover:not([aria-selected='true']) {
+        border-color: $white;
+      }
+    }
+
+    // 변형에서 transition을 다시 선언해 공통 바탕의 reduced motion 규칙보다 명시도가 높으므로 여기서도 끈다.
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+
+    // 전환: 강제 색상에서는 시스템 색 테두리로 버튼을 구분하고 선택 버튼을 시스템 글자색으로 채운다.
+    @media (forced-colors: active) {
+      border-color: CanvasText;
+
+      &:hover {
+        border-color: LinkText;
+      }
+
+      &[aria-selected='true'] {
+        forced-color-adjust: none;
+        border-color: CanvasText;
+        background-color: CanvasText;
+        color: Canvas;
+      }
+    }
+  }
+}
