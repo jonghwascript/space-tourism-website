@@ -49,18 +49,27 @@ Users should be able to:
 - Mobile-first workflow with `em` breakpoints at 768px and 1024px
 - Vanilla JavaScript for the mobile menu and tab switching (no frameworks or libraries)
 - [Gulp](https://gulpjs.com/) with `gulp-file-include` for shared HTML partials
-- [Playwright](https://playwright.dev/) scripts to measure layout, computed styles, and keyboard behavior
+- [Playwright](https://playwright.dev/) for layout, computed-style, and keyboard checks during development
 - [OpenSpec](https://github.com/Fission-AI/OpenSpec) to plan each change as a proposal, spec, design, and task list
 
 ### Getting started
 
 ```bash
 npm install
-npm run build   # clean dist, build HTML, compile SCSS, copy assets
-npm run dev     # build, then serve dist on http://localhost:3000 with live reload
+npm run build
+npm run dev
 ```
 
-Source files live in `src/` (`pages/`, `partials/`, `scss/`, `js/`, `images/`). The `dist/` folder is generated.
+`npm run build` generates the site in `dist`. `npm run dev` builds it, then serves `dist` on port 3000 with live reload. Both commands remove the existing `dist` directory before their initial build.
+
+To check the source without writing build output:
+
+```bash
+node --check src/js/main.js
+node -e "require('sass').compile('src/scss/style.scss')"
+```
+
+Source files live in `src/` (`pages/`, `partials/`, `scss/`, `js/`, `images/`). The `dist/` folder is generated. The screenshot above is tracked in the repository. The Playwright checks described here used temporary scripts; their results are recorded in the [OpenSpec change reports](openspec/changes/archive/), but the scripts are not included as reusable test commands.
 
 ### What I learned
 
