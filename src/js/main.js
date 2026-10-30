@@ -85,6 +85,14 @@
       } catch {
         // 주소를 바꿀 수 없어도 전환은 이미 끝났다.
       }
+
+      // 헤더의 현재 그룹 링크는 실제 주소가 그 링크 목적지와 같으면 page, 같은 그룹의 다른 페이지면 true다.
+      // 주소를 못 바꿨으면 결과도 그대로다.
+      const navLink = document.querySelector('.c-nav__link[aria-current]');
+      if (navLink) {
+        const isPage = new URL(navLink.href).pathname === window.location.pathname;
+        navLink.setAttribute('aria-current', isPage ? 'page' : 'true');
+      }
     };
 
     const fadeIn = (panel) => {
