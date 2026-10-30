@@ -30,8 +30,9 @@
 //       데스크톱은 숫자 탭 → 텍스트 → 이미지 가로 배치다. 보이는 패널이 subgrid로 main의 트랙을 물려받는다.
 // 제한: subgrid 미지원 시 세로 flex로 DOM 순서(제목 → 숫자 탭 → 텍스트 → 이미지)를 따른다. 간격은 각 margin이다.
 // 전환: 기본 패딩은 위·좌우 24px, 아래 48px이고 48em 이상에서는 사방 40px이다.
-//       64em 이상에서는 오른쪽 정렬·최대 폭 1275px·위아래 48px이며, subgrid 지원 시에만 3열로 바뀐다.
-//       이때 텍스트 열은 최소 491px을 확보하고 남는 너비를 이미지 열과 나눈다.
+//       64em 이상에서는 다른 페이지의 1110px 영역과 같은 왼쪽 시작선(최소 40px)에서 화면 오른쪽 끝까지, 위아래 48px이다.
+//       subgrid 지원 시에만 3열로 바뀌며, 텍스트 열은 491px 고정이고 남는 너비는 이미지 열이 갖는다.
+//       1440px에서는 영역 1275px로 Figma와 같고, 더 넓으면 텍스트와 이미지 사이만 넓어진다.
 .c-technology {
   display: flex;
   flex-direction: column;
@@ -59,7 +60,7 @@
         'title title title'
         'tabs text image';
       grid-template-rows: auto 1fr;
-      grid-template-columns: auto max(30.6875rem, 50% - 10rem) minmax(0, 1fr); // 491px
+      grid-template-columns: auto 30.6875rem minmax(0, 1fr); // 491px
       column-gap: 2rem; // 32px
       align-content: stretch;
       align-items: center;
@@ -68,8 +69,7 @@
   }
 
   @include mq('desktop') {
-    inline-size: min(79.6875rem, 100% - 2.5rem); // 1275px, 왼쪽 40px
-    margin-inline-start: auto;
+    margin-inline-start: max(2.5rem, (100% - 69.375rem) / 2); // 다른 페이지 1110px 영역의 왼쪽, 최소 40px
     padding: 3rem 0; // 48px
     text-align: start;
   }
@@ -206,7 +206,8 @@
 // 제한: 모바일·태블릿은 본문 패딩을 음수 margin으로 넘어 화면 폭 전체를 채운다.
 //       64em 미만에서는 이미지 폭이 768px보다 좁아지지 않아 상자 가운데를 기준으로 양옆이 잘린다.
 //       잘린 부분은 overflow: clip이라 스크롤 폭에 영향이 없다.
-// 전환: 높이 258 → 48em 이상 357 → 64em 이상 600px. 데스크톱은 이미지 열 폭 전체, 화면 오른쪽 끝까지.
+// 전환: 높이 258 → 48em 이상 357 → 64em 이상 600px. 데스크톱은 폭 608px(열이 더 좁으면 열 폭)으로
+//       이미지 열 오른쪽 끝(화면 오른쪽 끝)에 붙는다.
 .c-technology__image {
   grid-area: image;
   align-self: stretch;
@@ -221,6 +222,8 @@
 
   @include mq('desktop') {
     align-self: center;
+    justify-self: end;
+    inline-size: min(38rem, 100%); // 608px
     margin: 0;
   }
 
