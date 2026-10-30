@@ -154,16 +154,22 @@
   }
 }
 
+// 제한: Figma 소개 레이어 끝의 빈 문단(줄 간격 180%)만큼 아래를 띄워 점 탭 위치를 Figma 화면과 맞춘다.
+//       em이라 글자 크기·확대에 따라 함께 커진다. .l-stack > * 의 margin 0보다 뒤에 와서 이긴다.
+// 전환: 모바일 빈 문단 2줄(54px), 48em 이상 1줄(28.8px), 64em 이상 없음.
 .c-crew__bio {
   @include font-style(0.9375rem, 400, 1.8); // 15px
+  margin-block-end: 3.6em; // 1.8em × 2
   color: $blue-300;
 
   @include mq('tablet') {
     font-size: 1rem; // 16px
+    margin-block-end: 1.8em;
   }
 
   @include mq('desktop') {
     font-size: 1.125rem; // 18px
+    margin-block-end: 0;
   }
 }
 
@@ -174,7 +180,8 @@
 //       보이는 패널 상자가 subgrid로 탭 행까지 덮고 DOM에서 뒤에 있어 위에 그려지므로,
 //       탭을 패널 위로 올려 포인터를 받게 한다. 그리드 항목이라 position 없이 z-index가 적용된다.
 // 제한: 버튼(24px)이 점보다 커서, Figma 간격이 점 기준이 되도록 위아래 margin에서 그 차이의 절반(--dot-inset)을 뺀다.
-// 전환: 모바일·태블릿 점이 텍스트 아래 24px·사진 위 32px, 가운데. 데스크톱 왼쪽 열 아래쪽, 점 위 40px 이상·아래 48px.
+// 전환: 모바일·태블릿 점이 텍스트 묶음 아래 24px(소개 아래 빈 문단 여백은 별도)·사진 위 32px, 가운데.
+//       데스크톱 왼쪽 열 아래쪽, 점 위 40px 이상·아래 48px.
 .c-crew__tabs {
   --dot-inset: calc((1.5rem - var(--dot)) / 2); // --dot은 .c-tabs--dots가 정한다
 
