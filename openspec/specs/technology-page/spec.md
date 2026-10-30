@@ -183,13 +183,6 @@ Technology 본문은 헤더 아래 남은 화면 높이를 최소한으로 SHALL
 - **WHEN** 375px, 768px, 1440px에서 헤더 다음으로 Tab을 눌러 탭 그룹과 패널로 이동한다
 - **THEN** 선택된 숫자 탭 하나에 포커스가 가고 white outline이 보이며, 다음 Tab에서 보이는 패널에 포커스가 간다
 
-### Requirement: Technology 탭 전환 미지원 표시
-이 변경은 탭 전환 동작을 SHALL NOT 추가한다. 비선택 탭을 실행해도 페이지 오류가 생기지 않고 현재 패널이 유지되며, 이 제한을 보고서에 기록한다.
-
-#### Scenario: 비선택 탭 클릭
-- **WHEN** `technology-vehicle.html`에서 두 번째 탭을 클릭한다
-- **THEN** Launch vehicle 패널이 그대로 보이고 콘솔 오류가 없으며, `git diff --stat src/js package.json`에 변경이 없다
-
 ### Requirement: Technology 움직임 줄이기
 숫자 탭의 상태 전환 애니메이션은 사용자가 움직임 줄이기를 설정하면 SHALL 비활성화된다.
 
