@@ -1,102 +1,130 @@
-# Frontend Mentor - Space tourism website
+# Frontend Mentor - Space tourism website solution
 
-![Design preview for the Space tourism website coding challenge](./preview.jpg)
+This is a solution to the [Space tourism website challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/space-tourism-multipage-website-gRWj1URZ3). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-## Welcome! 👋
+## Table of contents
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects. Our challenges are perfect portfolio pieces, so please feel free to use what you create in your portfolio to show others.
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [Getting started](#getting-started)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+  - [AI Collaboration](#ai-collaboration)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
 
-**To do this challenge, you need a strong understanding of HTML, CSS, and JavaScript.**
+## Overview
 
-## The challenge
+### The challenge
 
-Your challenge is to build out this multi-page space tourism website and get it looking as close to the design as possible.
-
-**This project is a collaboration between us, Scrimba, and Kevin Powell. If you'd like to see how Kevin would tackle the project, you can [follow along on Scrimba's free course](https://scrimba.com/learn/spacetravel).**
-
-If you're working through it yourself, please use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
-
-If you choose to use a JS-heavy approach, we provide a local `data.json` file for the different page data. This means you'll be able to pull the data from there instead of using the separate `.html` files.
-
-Your users should be able to:
+Users should be able to:
 
 - View the optimal layout for each of the website's pages depending on their device's screen size
 - See hover states for all interactive elements on the page
 - View each page and be able to toggle between the tabs to see new information
 
-### Want some support on the challenge? 
+### Screenshot
 
-[Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
+![Home page of the Space tourism website at 1440px desktop width](./screenshot.jpg)
 
-## Where to find everything
+### Links
 
-Your task is to build out the project to the design file provided. You can download the Figma design file on the platform. The design download comes with a `README.md` file as well to help you get set up.
+- Solution URL: [github.com/jonghwascript/space-tourism-website](https://github.com/jonghwascript/space-tourism-website)
+- Live Site URL: [jonghwascript.github.io/space-tourism-website](https://jonghwascript.github.io/space-tourism-website/)
 
-All the required assets for this project are in the `/assets` folder. The assets are already exported for the correct screen size and optimized. Some images are reusable at multiple screen sizes.
+## My process
 
-The design system in the design file will give you more information about the various colors, fonts, and styles used in this project.
+### Built with
 
-## Using AI coding assistants
+- Semantic HTML5 markup with ARIA tabs (`tablist` / `tab` / `tabpanel`)
+- Sass (SCSS modules) with a BEM-style `c-` component and `l-` layout class naming
+- CSS custom properties
+- Flexbox
+- CSS Grid, including `subgrid`
+- Mobile-first workflow with `em` breakpoints at 768px and 1024px
+- Vanilla JavaScript for the mobile menu and tab switching (no frameworks or libraries)
+- [Gulp](https://gulpjs.com/) with `gulp-file-include` for shared HTML partials
+- [Playwright](https://playwright.dev/) scripts to measure layout, computed styles, and keyboard behavior
+- [OpenSpec](https://github.com/Fission-AI/OpenSpec) to plan each change as a proposal, spec, design, and task list
 
-We've included two files to help you if you're using AI coding assistants (like Claude, GitHub Copilot, Cursor, etc.) while working on this challenge:
+### Getting started
 
-- `AGENTS.md` - Contains detailed instructions for AI assistants on how to help you with this challenge. It's tailored to this challenge's difficulty level, so the AI will provide guidance appropriate to your learning stage—offering more support for beginner challenges and encouraging more independence on advanced ones.
-- `CLAUDE.md` - A pointer file that directs Claude-based tools to the AGENTS.md instructions.
+```bash
+npm install
+npm run build   # clean dist, build HTML, compile SCSS, copy assets
+npm run dev     # build, then serve dist on http://localhost:3000 with live reload
+```
 
-**How to use them:** You don't need to do anything! These files are automatically detected by most AI coding tools. The AI will read them and adjust its behavior to be a better learning partner—guiding you toward solutions rather than just giving you the answers.
+Source files live in `src/` (`pages/`, `partials/`, `scss/`, `js/`, `images/`). The `dist/` folder is generated.
 
-**Note:** These files are designed to help you *learn*, not to do the work for you. The AI is instructed to ask questions, give hints, and explain concepts rather than writing complete solutions.
+### What I learned
 
-## Building your project
+**Keeping DOM order and visual order separate with `subgrid`.** In the markup, each tablist comes before its panel so the keyboard order is "tabs, then panel". The designs, however, place the image above the tabs (Destination, Technology on mobile) or the text before the dots (Crew). Grid placement only works on direct children, so the visible panel adopts the parent's tracks with `subgrid`, and its children can be placed around the tablist:
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+```scss
+.c-destination__panel {
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-row: 2 / -1;   // every row below the page title
+    grid-column: 1 / -1;
+    grid-template-rows: subgrid;
+    grid-template-columns: subgrid;
+  }
+}
+```
 
-1. Separate the `starter-code` from the rest of this project and rename it to something meaningful for you. Initialize the codebase as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/).
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+The panel box then covers the tab row, so the tablist needs `z-index: 1` to keep receiving clicks.
 
-## Deploying your project
+**Separating the hit area from the visible shape.** The Crew dots are 10–15px, but each button is a 24px target. The gap between buttons is derived from the dot size so the visible spacing still matches the design:
 
-As mentioned above, there are many ways to host your project for free. Our recommended hosts are:
+```scss
+.c-tabs--dots {
+  --dot: 0.625rem;   // 10px
+  --dot-gap: 1rem;   // 16px between dots
+  --space: calc(var(--dot-gap) - (1.5rem - var(--dot)));
+}
+```
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+**Driving one tab script from existing ARIA markup.** A single block in `main.js` handles all three pages: click, Enter, and Space select a tab; arrow keys, Home, and End move with automatic activation; `aria-orientation` follows the tablist's computed `flex-direction`; and `history.replaceState` swaps the URL to the matching page file so a reload keeps the selection. The styles key off `[aria-selected='true']` and `[hidden]`, so the script only changes attributes.
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://www.frontendmentor.io/guides/hosting-your-solution).
+**Protecting template syntax from formatters.** Prettier splits an unquoted `@@if (...) { hidden}` in a start tag into separate attributes, which breaks `gulp-file-include`. A `<!-- prettier-ignore -->` comment above each such element keeps it intact.
 
-## Create a custom `README.md`
+### Continued development
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+- Test in Firefox, with real screen readers, and on touch devices. So far I have checked the site in Chromium only.
+- Revisit the places where I kept Figma values below WCAG non-text contrast (the inactive Crew dots and Technology tab borders).
+- Extract the page skeleton that the four pages repeat (two-row grid, full-height main, per-breakpoint background) into a shared rule.
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+### Useful resources
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+- [MDN: Subgrid](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Subgrid) - How a nested grid can reuse its parent's tracks, which made the DOM-order and visual-order split possible.
+- [WAI-ARIA Authoring Practices: Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) - Keyboard behavior and roving `tabindex` for the tab script.
+- [WCAG 2.2 Understanding Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) - The reason for the 24px dot buttons.
 
-## Submitting your solution
+### AI Collaboration
 
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://www.frontendmentor.io/guides/how-to-submit-solutions) for tips on how to do this.
+I used AI to generate the initial HTML and CSS, then reviewed and refined the implementation with a focus on semantic HTML, accessibility, and responsive layout.
 
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
+I also tested the result across different screen sizes and made adjustments to improve the code's flexibility and maintainability.
 
-## Sharing your solution
+This challenge helped me practice reviewing AI-generated code and making more informed frontend development decisions.
 
-There are multiple places you can share your solution:
+I used Claude Code throughout the project, working through an OpenSpec workflow for each page or feature.
 
-1. Share your solution page in the **#finished-projects** channel of the [community](https://www.frontendmentor.io/community). 
-2. Share on [X (formerly Twitter)](https://x.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in your post. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on [LinkedIn](https://www.linkedin.com/company/frontend-mentor/).
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
+- **Planning:** For each page it read the Figma frames, proposed a change with requirements and measurable scenarios, and asked me to decide on scope questions (for example, whether to use a slider library or style only, and how tab switching should update the URL).
+- **Implementation and checks:** It wrote the SCSS and JavaScript and verified them with Playwright measurements (element boxes, computed styles, keyboard order, contrast) instead of relying on a successful build.
+- **What worked well:** Writing requirements as measurable scenarios caught real bugs. Examples include a panel that intercepted tab clicks, a missing grid area, and a forced-colors border that appeared on every tab.
+- **What I had to steer:** Design-versus-accessibility trade-offs, such as keeping Figma colors below contrast thresholds, were my decisions. I also reviewed commit messages before pushing.
 
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback.
+## Author
 
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
+- GitHub - [@jonghwascript](https://github.com/jonghwascript)
 
-## Got feedback for us?
+## Acknowledgments
 
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
-
-**Have fun building!** 🚀
+Design and assets by [Frontend Mentor](https://www.frontendmentor.io). The challenge was created in collaboration with Scrimba and Kevin Powell.
