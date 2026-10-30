@@ -1,17 +1,62 @@
-  <main class="c-crew" id="main">
-    <h1 class="c-page-title l-cluster">
-      <span class="c-page-title__number" aria-hidden="true">02</span>
-      <span class="c-page-title__text">Meet your crew</span>
-    </h1>
+<main class="c-crew" id="main">
+  <h1 class="c-page-title l-cluster">
+    <span class="c-page-title__number" aria-hidden="true">02</span>
+    <span class="c-page-title__text">Meet your crew</span>
+  </h1>
 
-    <div class="c-tabs c-tabs--dots l-cluster" role="tablist" aria-label="Crew members">
-      <button class="c-tabs__tab" id="crew-tab-commander" type="button" role="tab" aria-controls="crew-panel-commander" aria-selected="@@if (context.selected === 'commander') {true}@@if (context.selected !== 'commander') {false}" tabindex="@@if (context.selected === 'commander') {0}@@if (context.selected !== 'commander') {-1}"><span class="u-sr-only">Douglas Hurley</span></button>
-      <button class="c-tabs__tab" id="crew-tab-specialist" type="button" role="tab" aria-controls="crew-panel-specialist" aria-selected="@@if (context.selected === 'specialist') {true}@@if (context.selected !== 'specialist') {false}" tabindex="@@if (context.selected === 'specialist') {0}@@if (context.selected !== 'specialist') {-1}"><span class="u-sr-only">Mark Shuttleworth</span></button>
-      <button class="c-tabs__tab" id="crew-tab-pilot" type="button" role="tab" aria-controls="crew-panel-pilot" aria-selected="@@if (context.selected === 'pilot') {true}@@if (context.selected !== 'pilot') {false}" tabindex="@@if (context.selected === 'pilot') {0}@@if (context.selected !== 'pilot') {-1}"><span class="u-sr-only">Victor Glover</span></button>
-      <button class="c-tabs__tab" id="crew-tab-engineer" type="button" role="tab" aria-controls="crew-panel-engineer" aria-selected="@@if (context.selected === 'engineer') {true}@@if (context.selected !== 'engineer') {false}" tabindex="@@if (context.selected === 'engineer') {0}@@if (context.selected !== 'engineer') {-1}"><span class="u-sr-only">Anousheh Ansari</span></button>
-    </div>
+  <div
+    class="c-tabs c-tabs--dots c-crew__tabs l-cluster"
+    role="tablist"
+    aria-label="Crew members"
+  >
+    <button
+      class="c-tabs__tab"
+      id="crew-tab-commander"
+      type="button"
+      role="tab"
+      aria-controls="crew-panel-commander"
+      aria-selected="@@if (context.selected === 'commander') {true}@@if (context.selected !== 'commander') {false}"
+      tabindex="@@if (context.selected === 'commander') {0}@@if (context.selected !== 'commander') {-1}"
+    >
+      <span class="u-sr-only">Douglas Hurley</span>
+    </button>
+    <button
+      class="c-tabs__tab"
+      id="crew-tab-specialist"
+      type="button"
+      role="tab"
+      aria-controls="crew-panel-specialist"
+      aria-selected="@@if (context.selected === 'specialist') {true}@@if (context.selected !== 'specialist') {false}"
+      tabindex="@@if (context.selected === 'specialist') {0}@@if (context.selected !== 'specialist') {-1}"
+    >
+      <span class="u-sr-only">Mark Shuttleworth</span>
+    </button>
+    <button
+      class="c-tabs__tab"
+      id="crew-tab-pilot"
+      type="button"
+      role="tab"
+      aria-controls="crew-panel-pilot"
+      aria-selected="@@if (context.selected === 'pilot') {true}@@if (context.selected !== 'pilot') {false}"
+      tabindex="@@if (context.selected === 'pilot') {0}@@if (context.selected !== 'pilot') {-1}"
+    >
+      <span class="u-sr-only">Victor Glover</span>
+    </button>
+    <button
+      class="c-tabs__tab"
+      id="crew-tab-engineer"
+      type="button"
+      role="tab"
+      aria-controls="crew-panel-engineer"
+      aria-selected="@@if (context.selected === 'engineer') {true}@@if (context.selected !== 'engineer') {false}"
+      tabindex="@@if (context.selected === 'engineer') {0}@@if (context.selected !== 'engineer') {-1}"
+    >
+      <span class="u-sr-only">Anousheh Ansari</span>
+    </button>
+  </div>
 
-    <div class="c-crew__panel" id="crew-panel-commander" role="tabpanel" aria-labelledby="crew-tab-commander" tabindex="0"@@if (context.selected !== 'commander') { hidden}>
+  <!-- prettier-ignore -->
+  <div class="c-crew__panel" id="crew-panel-commander" role="tabpanel" aria-labelledby="crew-tab-commander" tabindex="0"@@if (context.selected !== 'commander') { hidden}>
       <div class="c-crew__text l-stack">
         <div class="c-crew__heading l-stack">
           <p class="c-crew__role">Commander</p>
@@ -29,7 +74,8 @@
       </picture>
     </div>
 
-    <div class="c-crew__panel" id="crew-panel-specialist" role="tabpanel" aria-labelledby="crew-tab-specialist" tabindex="0"@@if (context.selected !== 'specialist') { hidden}>
+  <!-- prettier-ignore -->
+  <div class="c-crew__panel" id="crew-panel-specialist" role="tabpanel" aria-labelledby="crew-tab-specialist" tabindex="0"@@if (context.selected !== 'specialist') { hidden}>
       <div class="c-crew__text l-stack">
         <div class="c-crew__heading l-stack">
           <p class="c-crew__role">Mission Specialist</p>
@@ -47,7 +93,8 @@
       </picture>
     </div>
 
-    <div class="c-crew__panel" id="crew-panel-pilot" role="tabpanel" aria-labelledby="crew-tab-pilot" tabindex="0"@@if (context.selected !== 'pilot') { hidden}>
+  <!-- prettier-ignore -->
+  <div class="c-crew__panel" id="crew-panel-pilot" role="tabpanel" aria-labelledby="crew-tab-pilot" tabindex="0"@@if (context.selected !== 'pilot') { hidden}>
       <div class="c-crew__text l-stack">
         <div class="c-crew__heading l-stack">
           <p class="c-crew__role">Pilot</p>
@@ -66,7 +113,8 @@
       </picture>
     </div>
 
-    <div class="c-crew__panel" id="crew-panel-engineer" role="tabpanel" aria-labelledby="crew-tab-engineer" tabindex="0"@@if (context.selected !== 'engineer') { hidden}>
+  <!-- prettier-ignore -->
+  <div class="c-crew__panel" id="crew-panel-engineer" role="tabpanel" aria-labelledby="crew-tab-engineer" tabindex="0"@@if (context.selected !== 'engineer') { hidden}>
       <div class="c-crew__text l-stack">
         <div class="c-crew__heading l-stack">
           <p class="c-crew__role">Flight Engineer</p>
@@ -83,4 +131,4 @@
         <img src="./images/crew/image-anousheh-ansari.png" alt="Portrait of Anousheh Ansari" width="496" height="676">
       </picture>
     </div>
-  </main>
+</main>

@@ -66,3 +66,67 @@
     }
   }
 }
+
+// ------------------------------------------
+// 점형 (Crew)
+// ------------------------------------------
+// 관계: 24px 버튼 가운데에 ::before 점을 놓고, 버튼 사이 간격은 점 사이 간격에서 버튼과 점의 크기 차이를 빼서 정한다.
+// 제한: 버튼 크기는 고정되고 점 크기와 간격은 변수로 함께 조정한다.
+// 전환: 기본 점 지름·간격은 10px·16px, 64em 이상에서는 15px·40px이다.
+.c-tabs--dots {
+  --dot: 0.625rem; // 10px
+  --dot-gap: 1rem; // 16px
+  --space: calc(var(--dot-gap) - (1.5rem - var(--dot)));
+
+  @include mq('desktop') {
+    --dot: 0.9375rem; // 15px
+    --dot-gap: 2.5rem; // 40px
+  }
+
+  .c-tabs__tab {
+    inline-size: 1.5rem; // 24px
+    block-size: 1.5rem;
+
+    &::before {
+      content: '';
+      inline-size: var(--dot);
+      block-size: var(--dot);
+      border-radius: 50%;
+      background-color: rgb(255 255 255 / 17.4%);
+      transition: background-color 0.3s ease;
+    }
+
+    &[aria-selected='true']::before {
+      background-color: $white;
+    }
+
+    @media (hover: hover) {
+      &:hover:not([aria-selected='true'])::before {
+        background-color: rgb(255 255 255 / 50%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &::before {
+        transition: none;
+      }
+    }
+
+    // 전환: 강제 색상에서는 비선택 점을 시스템 배경과 테두리로, 선택 점을 시스템 글자색으로 채운다.
+    @media (forced-colors: active) {
+      &::before {
+        forced-color-adjust: none;
+        border: 1px solid CanvasText;
+        background-color: Canvas;
+      }
+
+      &:hover::before {
+        border-color: LinkText;
+      }
+
+      &[aria-selected='true']::before {
+        background-color: CanvasText;
+      }
+    }
+  }
+}

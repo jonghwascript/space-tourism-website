@@ -1,0 +1,232 @@
+@use '../abstracts' as *;
+
+// ------------------------------------------
+// Crew 페이지 골격과 배경
+// ------------------------------------------
+// 관계: 홈·Destination과 같이 body를 헤더·main 2행 그리드로 만들어 main이 헤더 아래 남은 높이를 채운다.
+// 제한: 최소 높이라 내용이 길면 늘어난다.
+// 전환: 48em·64em에서 배경 이미지만 바뀐다. 이미지를 못 불러오면 blue-900이 보인다.
+.c-page--crew {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  min-block-size: 100vh;
+  min-block-size: 100svh;
+  background: $blue-900 url('../images/crew/background-crew-mobile.jpg') center / cover no-repeat;
+
+  @include mq('tablet') {
+    background-image: url('../images/crew/background-crew-tablet.jpg');
+  }
+
+  @include mq('desktop') {
+    background-image: url('../images/crew/background-crew-desktop.jpg');
+  }
+}
+
+// ------------------------------------------
+// 본문(main)
+// ------------------------------------------
+// 관계: DOM은 제목 → 점 탭 → 패널(텍스트·사진)이지만, 화면은 Figma대로 텍스트 → 점 탭 → 사진이다.
+//       Destination과 같이 보이는 패널이 subgrid로 main의 트랙을 물려받아 자식을 각 영역에 놓는다.
+// 제한: subgrid 미지원 시 세로 flex로 DOM 순서(제목 → 점 탭 → 텍스트 → 사진)를 따른다. 간격은 각 margin이다.
+// 전환: 기본 패딩 24px, 48em 이상 40px, 64em 이상 최대 폭 1110px(좌우 최소 40px)·위아래 48px.
+//       subgrid 지원 시 64em 이상에서 2열로 바뀌고, 남은 높이는 기본 사진 행·데스크톱 텍스트 행에 배분된다.
+.c-crew {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--s1); // 24px
+  text-align: center;
+
+  @include mq('tablet') {
+    padding: 2.5rem; // 40px
+  }
+
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-template-areas:
+      'title'
+      'text'
+      'tabs'
+      'image';
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+
+    @include mq('desktop') {
+      grid-template-areas:
+        'title title'
+        'text image'
+        'tabs image';
+      grid-template-rows: auto 1fr auto;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2rem; // 32px
+    }
+  }
+
+  @include mq('desktop') {
+    inline-size: min(69.375rem, 100% - 5rem); // 1110px, 좌우 40px
+    margin-inline: auto;
+    padding: 3rem 0; // 48px
+    text-align: start;
+  }
+}
+
+// 제목은 공통 컴포넌트(_page-title.scss). 여기서는 본문 안 위치와 아래 간격만 정한다.
+.c-crew > .c-page-title {
+  grid-area: title;
+  align-self: stretch;
+  justify-self: stretch;
+  margin-block-end: var(--s1); // 24px
+}
+
+.c-crew__panel {
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    grid-template-rows: subgrid;
+    grid-template-columns: subgrid;
+    justify-items: center;
+  }
+}
+
+// ------------------------------------------
+// 역할·이름·소개
+// ------------------------------------------
+// 제한: 기본 최대 514px, 태블릿 최대 512px 가운데. 데스크톱은 왼쪽 열에 맞춰 줄고 최대 640px이다.
+// 전환: 모바일·태블릿은 제목 아래 여백에 더해 위쪽을 40px 띄우고, 데스크톱은 텍스트 행 가운데에 놓는다.
+.c-crew__text {
+  grid-area: text;
+  inline-size: min(32.125rem, 100%); // 514px
+  margin-block-start: 2.5rem; // 40px
+
+  @include mq('tablet') {
+    inline-size: min(32rem, 100%); // 512px
+  }
+
+  @include mq('desktop') {
+    align-self: center;
+    justify-self: stretch;
+    inline-size: auto;
+    max-inline-size: 40rem; // 640px
+    margin-block-start: 0;
+  }
+}
+
+.c-crew__heading {
+  --space: 0.5rem; // 역할–이름 8px
+
+  @include mq('tablet') {
+    --space: 1rem; // 16px
+  }
+}
+
+.c-crew__role,
+.c-crew__name {
+  text-transform: uppercase;
+}
+
+// white 50%는 opacity 대신 글자색 알파로 준다. 강제 색상에서 글자가 흐려지지 않는다.
+.c-crew__role {
+  @include font-style(1.125rem, 400, 1.15, $font-display); // 18px
+  color: rgb(255 255 255 / 50%);
+
+  @include mq('tablet') {
+    font-size: 1.5rem; // 24px
+  }
+
+  @include mq('desktop') {
+    font-size: 2rem; // 32px
+  }
+}
+
+.c-crew__name {
+  @include font-style(1.5rem, 400, 1.15, $font-display); // 24px
+  color: $white;
+
+  @include mq('tablet') {
+    font-size: 2.5rem; // 40px
+  }
+
+  @include mq('desktop') {
+    font-size: 3.5rem; // 56px
+  }
+}
+
+.c-crew__bio {
+  @include font-style(0.9375rem, 400, 1.8); // 15px
+  color: $blue-300;
+
+  @include mq('tablet') {
+    font-size: 1rem; // 16px
+  }
+
+  @include mq('desktop') {
+    font-size: 1.125rem; // 18px
+  }
+}
+
+// ------------------------------------------
+// 점 탭 위치
+// ------------------------------------------
+// 관계: 점 모양은 공통 컴포넌트(_tabs.scss의 --dots). 여기서는 영역과 간격만 정한다.
+//       보이는 패널 상자가 subgrid로 탭 행까지 덮고 DOM에서 뒤에 있어 위에 그려지므로,
+//       탭을 패널 위로 올려 포인터를 받게 한다. 그리드 항목이라 position 없이 z-index가 적용된다.
+// 제한: 버튼(24px)이 점보다 커서, Figma 간격이 점 기준이 되도록 위아래 margin에서 그 차이의 절반(--dot-inset)을 뺀다.
+// 전환: 모바일·태블릿 점이 텍스트 아래 24px·사진 위 32px, 가운데. 데스크톱 왼쪽 열 아래쪽, 점 위 40px 이상·아래 48px.
+.c-crew__tabs {
+  --dot-inset: calc((1.5rem - var(--dot)) / 2); // --dot은 .c-tabs--dots가 정한다
+
+  z-index: 1;
+  grid-area: tabs;
+  margin-block: calc(var(--s1) - var(--dot-inset)) calc(var(--dot-inset) * -1); // 점 기준 텍스트 아래 24px, 사진 위 32px
+
+  @include mq('desktop') {
+    justify-content: flex-start;
+    justify-self: start;
+    margin-block: calc(2.5rem - var(--dot-inset)) calc(3rem - var(--dot-inset)); // 점 기준 위 40px, 아래 48px
+  }
+}
+
+// ------------------------------------------
+// 승무원 사진
+// ------------------------------------------
+// 관계: 사진은 원본 비율을 유지하며 높이 상한과 부모 열의 폭에 맞춰 줄어든다.
+//       상자가 사진 크기를 따라가므로 아래쪽 마스크가 사진 아래 끝에 맞는다.
+// 제한: 원본보다 키우지 않는다. 열이 좁으면 폭에 맞춰 더 작아진다.
+// 전환: 높이 상한 340 → 48em 이상 560 → 64em 이상 676px. 사진 영역 안에서 모바일 세로 가운데,
+//       태블릿 위쪽(Figma items-start), 데스크톱 오른쪽 열 세로 가운데.
+.c-crew__image {
+  grid-area: image;
+  align-self: center;
+  margin-block-start: 2rem; // 32px
+
+  @include mq('tablet') {
+    align-self: start;
+  }
+
+  @include mq('desktop') {
+    align-self: center;
+    margin-block-start: 0;
+  }
+
+  // CSS의 auto가 width·height 속성(496×676)보다 우선해, 로드 후 원본 비율을 따른다.
+  img {
+    $fade: linear-gradient(to bottom, #000 77.394%, transparent);
+
+    inline-size: auto;
+    block-size: auto;
+    max-block-size: 21.25rem; // 340px
+    -webkit-mask-image: $fade;
+    mask-image: $fade;
+
+    @include mq('tablet') {
+      max-block-size: 35rem; // 560px
+    }
+
+    @include mq('desktop') {
+      max-block-size: 42.25rem; // 676px
+    }
+  }
+}
