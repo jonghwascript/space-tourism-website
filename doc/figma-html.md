@@ -26,6 +26,17 @@ Figma 프레임의 내용과 구조를 **완성된 시맨틱 HTML**로 만듭니
 4. **마크업**: 공통 §4(HTML 규칙), §5(Auto Layout 대응)를 따릅니다.
    - 모든 요소에 역할 기준의 `c-` 클래스를 붙입니다. CSS 단계에서 클래스를 다시 설계하지 않도록 합니다.
    - Auto Layout 방향에 맞춰 `l-` 클래스를 붙입니다. gap이 `data-*` 프리셋과 정확히 같을 때만 프리셋을 씁니다. 다르면 프리셋 없이 두고 인계표에 Figma 값을 적습니다.
+   - **gulp `@@` 구문과 Prettier**: 시작 태그의 속성 자리(따옴표 밖)에 `@@if`를 쓰면, 그 요소 바로 위 줄에 `<!-- prettier-ignore -->`를 붙입니다. Prettier는 따옴표 밖의 `@@if (조건) { 속성}`을 HTML 속성으로 읽어 `@@if`, `(context.selected`, `!=""`처럼 쪼개기 때문입니다. 그러면 gulp 구문이 깨집니다.
+
+     ```html
+     <!-- prettier-ignore -->
+     <div class="c-crew__panel" id="crew-panel-pilot" role="tabpanel" aria-labelledby="crew-tab-pilot" tabindex="0"@@if (context.selected !== 'pilot') { hidden}>
+     ```
+
+     - 붙이지 않아도 되는 곳: 속성값 따옴표 **안**의 `@@if`(예: `aria-selected="@@if (…) {true}…"`)와 페이지의 `@@include(...)` 줄. Prettier가 들여쓰기만 바꾸고 구문은 그대로 둡니다.
+     - `<!-- prettier-ignore-attribute -->`로는 막히지 않습니다. 속성을 읽는 단계에서 이미 쪼개지기 때문입니다.
+     - `prettier-ignore`는 요소 전체(자식 포함)를 포맷에서 뺍니다. 주석은 빌드된 HTML에도 남지만, 화면과 동작에는 영향이 없습니다.
+     - Prettier 설정 파일(`.prettierrc.json`, `.prettierignore`)로는 "`@@`가 있는 줄만 제외"할 수 없어 이 주석 방식을 씁니다.
 5. **스타일 인계표 작성**: 보고서에 클래스별 Figma 값을 표로 남깁니다.
 
    | 클래스 | Figma 노드 | 크기·간격·패딩 | 글꼴(크기/굵기/줄 간격) | 색 | 상태 | 반응형 차이 |
@@ -51,4 +62,5 @@ Figma 프레임의 내용과 구조를 **완성된 시맨틱 HTML**로 만듭니
 - [ ] 자산이 `icon-*`/`image-*` 이름 규칙을 따르고, 중복 파일과 localhost 주소가 없다
 - [ ] 모든 요소에 BEM `c-` 클래스와 알맞은 `l-` 클래스가 있고, ID는 연결용으로만 썼다
 - [ ] 인라인 스타일이 없고, `src/scss`·`src/js`를 수정하지 않았다
+- [ ] 따옴표 밖 `@@if`가 있는 요소마다 바로 위에 `<!-- prettier-ignore -->`가 있다
 - [ ] 보고서에 스타일 인계표, placeholder, 미검증 항목을 적었다

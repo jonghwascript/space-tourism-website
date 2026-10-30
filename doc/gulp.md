@@ -54,6 +54,9 @@ exports.default = gulp.series(buildTask, serveTask, watchTask);
 - HTML include는 `prefix: '@@'`, `basepath: '@file'` 설정을 사용한다.
   예를 들어 `src/pages/index.html`에서
   `@@include('../partials/header.html')`로 참조하려면 해당 경로에 파일을 만든다.
+- 시작 태그의 따옴표 밖 자리에 `@@if`를 쓴 요소는 Prettier가 구문을 깨뜨린다.
+  그 요소 바로 위에 `<!-- prettier-ignore -->`를 붙인다.
+  자세한 규칙은 [figma-html.md](figma-html.md)의 절차 4단계를 따른다.
 - HTML 빌드 입력은 `src/pages/*.html`이므로 `src/pages/` 바로 아래의 HTML만
   페이지로 출력한다. `src/partials/` 파일은 include를 통해 반영한다.
 - 정적 파일은 `base: 'src'`, `encoding: false`로 복사한다.
