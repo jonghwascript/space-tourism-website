@@ -1,17 +1,11 @@
 @use '../abstracts' as *;
 
 // ------------------------------------------
-// Technology 페이지 골격과 배경
+// Technology 페이지 배경
 // ------------------------------------------
-// 관계: 홈·Destination·Crew와 같이 body를 헤더·main 2행 그리드로 만들어 main이 헤더 아래 남은 높이를 채운다.
-// 제한: 최소 높이라 내용이 길면 늘어난다.
+// 관계: 공통 골격은 components/_page.scss의 .c-page가 담당한다.
 // 전환: 48em·64em에서 배경 이미지만 바뀐다. 이미지를 못 불러오면 blue-900이 보인다.
 .c-page--technology {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  grid-template-columns: minmax(0, 1fr);
-  min-block-size: 100vh;
-  min-block-size: 100svh;
   background: $blue-900 url('../images/technology/background-technology-mobile.jpg') center / cover no-repeat;
 
   @include mq('tablet') {
