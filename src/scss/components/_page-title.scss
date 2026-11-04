@@ -1,0 +1,37 @@
+@use '../abstracts' as *;
+
+// ------------------------------------------
+// 페이지 제목 ("01 Pick your destination" 등)
+// ------------------------------------------
+// 관계: Destination·Crew·Technology가 같은 마크업(h1.l-cluster > __number + __text)을 쓴다.
+//       번호는 aria-hidden이라 제목 이름에 들어가지 않는다.
+// 제한: 좁은 화면·글자 확대에서는 l-cluster의 줄바꿈으로 번호와 텍스트가 두 줄이 될 수 있다.
+// 전환: 모바일 가운데, 48em 이상 왼쪽 정렬. 글자 16/20/28px(text-preset-5).
+.c-page-title {
+  --space: 1.5rem; // 번호–텍스트 24px
+
+  @include font-style(1rem, 400, 1, $font-condensed); // 16px
+  color: $white;
+  letter-spacing: 0.15rem; // 2.4px
+  text-transform: uppercase;
+
+  @include mq('tablet') {
+    justify-content: flex-start;
+    font-size: 1.25rem; // 20px
+    letter-spacing: 0.1875rem; // 3px
+  }
+
+  @include mq('desktop') {
+    font-size: 1.75rem; // 28px
+    letter-spacing: 0.25rem; // 4px
+  }
+}
+
+.c-page-title__number {
+  font-weight: 700;
+  opacity: 0.25;
+
+  @include mq('tablet') {
+    letter-spacing: 0.16875em; // 데스크톱 4.725px(28px 기준)에 비례
+  }
+}

@@ -1,0 +1,225 @@
+@use '../abstracts' as *;
+
+// ------------------------------------------
+// Destination 페이지 배경
+// ------------------------------------------
+// 관계: 공통 골격은 components/_page.scss의 .c-page가 담당한다.
+// 전환: 48em·64em에서 배경 이미지만 바뀐다. 이미지를 못 불러오면 blue-900이 보인다.
+.c-page--destination {
+  background: $blue-900 url('../images/destination/background-destination-mobile.jpg') center / cover no-repeat;
+
+  @include mq('tablet') {
+    background-image: url('../images/destination/background-destination-tablet.jpg');
+  }
+
+  @include mq('desktop') {
+    background-image: url('../images/destination/background-destination-desktop.jpg');
+  }
+}
+
+// ------------------------------------------
+// 본문(main)
+// ------------------------------------------
+// 관계: 보이는 패널이 main의 트랙을 subgrid로 공유해 이미지를 탭 위에 놓고, 64em 이상에서는 왼쪽 열에 둔다.
+//       남은 높이는 이미지 행(64em 이상에서는 오른쪽 열의 위아래 빈 행)에 분배한다.
+// 제한: subgrid 미지원 시 세로 flex로 DOM 순서(제목 → 탭 → 패널 내용)를 따른다. 요소 간 여백은 각 margin으로 유지한다.
+// 전환: 기본 패딩 1.5rem, 48em 이상 2.5rem. 64em 이상 최대 폭 69.375rem(좌우 최소 2.5rem)·위아래 패딩 3rem.
+//       subgrid 지원 시에만 64em 이상에서 2열로 전환한다.
+.c-destination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--s1); // 24px
+  text-align: center;
+
+  @include mq('tablet') {
+    padding: 2.5rem; // 40px
+  }
+
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-template-areas:
+      'title'
+      'image'
+      'tabs'
+      'text'
+      'stats';
+    grid-template-rows: auto 1fr auto auto auto;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+
+    @include mq('desktop') {
+      grid-template-areas:
+        'title title'
+        'image .'
+        'image tabs'
+        'image text'
+        'image stats'
+        'image .';
+      grid-template-rows: auto 1fr auto auto auto 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2rem; // 32px
+    }
+  }
+
+  @include mq('desktop') {
+    inline-size: min(69.375rem, 100% - 5rem); // 1110px, 좌우 40px
+    margin-inline: auto;
+    padding: 3rem 0; // 48px
+    text-align: start;
+  }
+}
+
+// 제목은 공통 컴포넌트(_page-title.scss). 여기서는 본문 안 위치와 아래 간격만 정한다.
+.c-destination > .c-page-title {
+  grid-area: title;
+  align-self: stretch;
+  justify-self: stretch;
+  margin-block-end: var(--s1); // 24px
+}
+
+.c-destination__panel {
+  @supports (grid-template-rows: subgrid) {
+    display: grid;
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    grid-template-rows: subgrid;
+    grid-template-columns: subgrid;
+    justify-items: center;
+  }
+}
+
+// ------------------------------------------
+// 목적지 이미지
+// ------------------------------------------
+// 제한: 이미지 비율은 1:1이며, 최대 너비보다 가용 폭이 좁으면 그 폭에 맞춰 줄어든다.
+// 전환: 최대 너비는 기본 9.375rem, 48em 이상 18.75rem, 64em 이상 30rem. subgrid 지원 시 데스크톱은 왼쪽 열 가운데.
+.c-destination__image {
+  grid-area: image;
+  align-self: center;
+  inline-size: min(9.375rem, 100%); // 150px
+
+  @include mq('tablet') {
+    inline-size: min(18.75rem, 100%); // 300px
+  }
+
+  @include mq('desktop') {
+    inline-size: min(30rem, 100%); // 480px
+  }
+
+  // 폭은 width 속성(480)이 리셋의 max-width: 100%에 잘려 picture 폭을 따른다.
+  // height 속성(480)이 남아 세로로 늘어나지 않게 높이만 비율에 맡긴다.
+  img {
+    block-size: auto;
+  }
+}
+
+// ------------------------------------------
+// 탭·텍스트·통계 묶음
+// ------------------------------------------
+// 관계: 탭은 main의 자식, 텍스트·통계는 subgrid 패널의 자식이지만 같은 그리드 열에 놓여
+//       같은 폭과 가운데 위치를 가져 한 열처럼 보인다(Figma Explanation).
+// 전환: 모바일·태블릿 최대 514px 상자를 가운데 두고 내용도 가운데 정렬, 이미지와 탭 사이 32px.
+//       데스크톱 445px 상자는 오른쪽 열 가운데에 두고 내용은 왼쪽 정렬, 묶음 안 간격 40px.
+.c-destination__tabs,
+.c-destination__text,
+.c-destination__stats {
+  inline-size: min(32.125rem, 100%); // 514px
+
+  @include mq('desktop') {
+    inline-size: min(27.8125rem, 100%); // 445px
+  }
+}
+
+// 보이는 패널 상자가 subgrid로 탭 행까지 덮고 DOM에서 뒤에 있어 위에 그려지므로,
+// 탭을 패널 위로 올려 포인터(hover·클릭)를 받게 한다. 그리드 항목이라 position 없이 z-index가 적용된다.
+.c-destination__tabs {
+  z-index: 1;
+  grid-area: tabs;
+  margin-block-start: 2rem; // 32px
+
+  @include mq('desktop') {
+    justify-content: flex-start;
+    margin-block-start: 0;
+  }
+}
+
+.c-destination__text {
+  --space: 1rem; // 이름–설명 16px
+
+  grid-area: text;
+  margin-block-start: var(--s1); // 24px
+
+  @include mq('desktop') {
+    margin-block-start: 2.5rem; // 40px
+  }
+}
+
+// 제한: 한 단어라 줄바꿈이 안 되므로 화면 폭 18%를 상한으로 둬 좁은 화면·글자 확대에서 넘치지 않게 한다.
+// 기본 글꼴 크기에서는 상한에 닿지 않아 56/80/96px 그대로다.
+.c-destination__name {
+  @include font-style(min(3.5rem, 18vw), 400, 1, $font-display); // 56px
+  color: $white;
+  text-transform: uppercase;
+
+  @include mq('tablet') {
+    font-size: min(5rem, 18vw); // 80px
+  }
+
+  @include mq('desktop') {
+    font-size: 6rem; // 96px
+  }
+}
+
+.c-destination__description {
+  @include font-style(0.9375rem, 400, 1.8); // 15px
+  color: $blue-300;
+
+  @include mq('tablet') {
+    font-size: 1rem; // 16px
+  }
+
+  @include mq('desktop') {
+    font-size: 1.125rem; // 18px
+  }
+}
+
+// ------------------------------------------
+// 통계
+// ------------------------------------------
+// 관계: 위 테두리가 Figma의 구분선(1px white 25%)이고, 패딩이 구분선–통계 간격이다.
+// 전환: 모바일 세로 쌓기(간격 24px), 48em 이상 같은 폭 2열(간격 24px). 데스크톱은 구분선 앞뒤 40px.
+.c-destination__stats {
+  display: grid;
+  grid-area: stats;
+  gap: var(--s1); // 24px
+  margin-block-start: var(--s1); // 24px
+  padding-block-start: var(--s1); // 24px
+  border-block-start: 1px solid rgb(255 255 255 / 25%);
+
+  @include mq('tablet') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mq('desktop') {
+    margin-block-start: 2.5rem; // 40px
+    padding-block-start: 2.5rem; // 40px
+  }
+}
+
+.c-destination__stat {
+  --space: 0.75rem; // 라벨–값 12px
+}
+
+.c-destination__stat-label {
+  @include font-style(0.875rem, 400, 1.2, $font-condensed); // 14px
+  color: $blue-300;
+  letter-spacing: 0.125rem; // 2px
+  text-transform: uppercase;
+}
+
+.c-destination__stat-value {
+  @include font-style(1.75rem, 400, 1.2, $font-display); // 28px
+  color: $white;
+  text-transform: uppercase;
+}
